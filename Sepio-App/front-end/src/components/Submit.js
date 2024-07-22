@@ -955,9 +955,10 @@ export default function Layout({ icon_username }) {
 
 	});
 	const toast = useRef(null);
-	
+	const [dropDown, setDropDown] = useState(null);
+	const open = Boolean(dropDown);
 	const [sidebarOpen, setSidebarOpen] = useState(true);
-   
+	const [userPrivileges, setUserPrivileges] = useState(null);
 
 
 
@@ -1085,6 +1086,8 @@ export default function Layout({ icon_username }) {
 		navigate('/querytool');
 	}
 
+
+
 	return (
 		
 		<div style={{ flexDirection: 'column', height: '100vh' }}>
@@ -1117,6 +1120,54 @@ export default function Layout({ icon_username }) {
 						<Avatar sx={{ width: 32, height: 32 }}>U</Avatar>
 					</IconButton>
 
+					<Menu
+						anchorEl={dropDown}
+						id='account-menu'
+						open={open}
+						onClose={handleClose}
+						onClick={handleClose}
+						PaperProps={{
+							elevation: 5,
+							sx: {
+								width: '140px',
+								borderRadius: '10px',
+								overflow: 'visible',
+								mt: 1,
+								'&::before': {
+									content: '""',
+									display: 'inline-block',
+									position: 'absolute',
+									top: 0,
+									right: 19,
+									width: 10,
+									height: 10,
+									bgcolor: 'background.paper',
+									transform: 'translateY(-50%) rotate(45deg)',
+									zIndex: 0,
+								},
+							},
+						}}
+						transformOrigin={{
+							vertical: 'top',
+							horizontal: 'center',
+						}}
+						anchorOrigin={{
+							vertical: 'bottom',
+							horizontal: 'center',
+						}}
+					>
+						<MenuItem sx={{ display: 'flex', justifyContent: 'center' }} title='Profile'>
+							<p style={{ marginBottom: '0px' }}>
+								User: {icon_username}
+							</p>
+						</MenuItem>
+						<Divider spacing={1}></Divider>
+						<MenuItem sx={{ display: 'flex', justifyContent: 'center' }} title='Profile'>
+							<p style={{ marginBottom: '0px' }}>
+								{userPrivileges}
+							</p>
+						</MenuItem>
+					</Menu>
         </Toolbar>
       </AppBar>
       <div style={{ display: "flex", height: "100vh" }}>
