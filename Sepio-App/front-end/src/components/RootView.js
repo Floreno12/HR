@@ -72,6 +72,33 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import React, { useState } from 'react';
 import 'primereact/resources/themes/saga-blue/theme.css'; // Import theme
 import 'primereact/resources/primereact.min.css'; // Import PrimeReact CSS
@@ -82,6 +109,10 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { Button } from 'primereact/button';
 import { FileUpload } from 'primereact/fileupload';
 import { RadioButton } from "primereact/radiobutton";
+import { Toolbar } from 'primereact/toolbar';
+import { Avatar } from 'primereact/avatar';
+
+
 const EmployeeForm = () => {
   const [type, setType] = useState(null);
   const [skills, setSkills] = useState([]);
@@ -97,6 +128,42 @@ const EmployeeForm = () => {
     { label: 'Employee', value: 'Employee' },
     { label: 'Contractor', value: 'Contractor' }
   ];
+
+
+
+
+  const startContent = (
+    <React.Fragment>
+        <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+       {/* <img src = {'//x_llll2_insearch_f.inCloudLogicLogo.png'}> </img> */}
+
+        </svg>
+    </React.Fragment>
+);
+
+const centerContent = (
+    <div className="flex flex-wrap align-items-center gap-3">
+        <button className="p-link inline-flex justify-content-center align-items-center text-white h-3rem w-3rem border-circle hover:bg-white-alpha-10 transition-all transition-duration-200">
+            <i className="pi pi-home text-2xl"></i>
+        </button>
+        <button className="p-link inline-flex justify-content-center align-items-center text-white h-3rem w-3rem border-circle hover:bg-white-alpha-10 transition-all transition-duration-200">
+            <i className="pi pi-user text-2xl"></i>
+        </button>
+        <button className="p-link inline-flex justify-content-center align-items-center text-white h-3rem w-3rem border-circle hover:bg-white-alpha-10 transition-all transition-duration-200">
+            <i className="pi pi-search text-2xl"></i>
+        </button>
+    </div>
+);
+
+const endContent = (
+    <React.Fragment>
+        <div className="flex align-items-center gap-2">
+            <Avatar image="https://primefaces.org/cdn/primereact/images/avatar/amyelsner.png" shape="circle" />
+            <span className="font-bold text-bluegray-50">Amy Elsner</span>
+        </div>
+    </React.Fragment>
+);
 
   return (
     <div style={{ display: 'flex' }}>
@@ -167,59 +234,51 @@ const EmployeeForm = () => {
           </li>
         </ul>
       </div>
+
+      
       <div style={{ flex: 1, padding: '1rem' }}>
-        <h1>Employee Form</h1>
-        <div className="p-fluid">
-          <div className="p-field">
-            <label htmlFor="photo">Photo</label>
-            <FileUpload name="photo" accept="image/*" mode="basic" auto />
+      <Toolbar start={startContent} center={centerContent} end={endContent} className="bg-gray-900 shadow-2" style={{ borderRadius: '3rem', backgroundImage: 'linear-gradient(to right, var(--bluegray-500), var(--bluegray-800))' }} />
+         <div className="p-fluid" style={{ display: 'flex', flexDirection: 'row' }}>
+          <div style={{ flex: 1, marginRight: '1rem' }}>
+            <div className="p-field">
+              <label htmlFor="skills">Skills</label>
+              <InputText id="skills" value={skills} onChange={(e) => setSkills(e.target.value)} />
+            </div>
+            <div className="p-field">
+              <label htmlFor="education">Education</label>
+              <InputText id="education" value={education} onChange={(e) => setEducation(e.target.value)} />
+            </div>
           </div>
-          <div className="p-field">
-            <label htmlFor="skills" style = {{maxWidth: '300px',marginLeft: '10px', display: 'flex'}}>Skills</label>
-	
-            <InputText id="skills" value={skills} style = {{maxWidth: '300px',marginLeft: '10px', display: 'flex' }} onChange={(e) => setSkills(e.target.value)} />
+          <div style={{ flex: 1, marginLeft: '1rem' }}>
+            <div className="p-field">
+              <label htmlFor="rate">Rate</label>
+              <InputText id="rate" value={rate} onChange={(e) => setRate(e.target.value)} />
+            </div>
+            <div className="p-field">
+              <label htmlFor="type">Type</label>
+              <Dropdown id="type" value={type} options={types} onChange={(e) => setType(e.value)} placeholder="Select Type" />
+            </div>
           </div>
-          <div className="p-field">
-            <label htmlFor="education">Education</label>
-            <InputText id="education" value={education} onChange={(e) => setEducation(e.target.value)} />
-          </div>
-          <div className="p-field">
-            <label htmlFor="workExperience">Work Experience</label>
-            <InputTextarea id="workExperience" rows={3} value={workExperience} onChange={(e) => setWorkExperience(e.target.value)} />
-          </div>
-          <div className="p-field">
-            <label htmlFor="rate">Rate</label>
-            <InputText id="rate" value={rate} onChange={(e) => setRate(e.target.value)} />
-          </div>
-          <div className="p-field">
-            <label htmlFor="type">Type</label>
-            <Dropdown id="type" value={type} options={types} onChange={(e) => setType(e.value)} placeholder="Select Type" />
-          </div>
-          <div className="p-field">
-            <label htmlFor="projectAccess">Project Access</label>
-            <InputText id="projectAccess" value={projectAccess} onChange={(e) => setProjectAccess(e.target.value)} />
-          </div>
-          <div className="p-field">
-            <label htmlFor="goals">Personal and Non-personal Goals</label>
-            <InputTextarea id="goals" rows={3} value={goals} onChange={(e) => setGoals(e.target.value)} />
-          </div>
-          <div className="p-field">
-            <label htmlFor="jiraIntegration">Integration with Jira</label>
-            <InputText id="jiraIntegration" value={jiraIntegration} onChange={(e) => setJiraIntegration(e.target.value)} />
-          </div>
-          <div className="p-field">
-            <label htmlFor="roles">Roles</label>
-            <InputText id="roles" value={roles} onChange={(e) => setRoles(e.target.value)} />
-          </div>
-          <div className="p-field">
-            <Button label="Generate CV (PDF)" icon="pi pi-file-pdf" />
-            <Button label="Generate CV (DOCX)" icon="pi pi-file-word" className="p-button-secondary" style={{ marginLeft: '1rem' }} />
-          </div>
+        </div>
+        <div className="p-field" style = {{ marginTop: '50px'}}>
+          <label htmlFor="workExperience">Work Experience</label>
+          <InputTextarea id="workExperience" style = {{width: '100%'}} rows={3} value={workExperience} onChange={(e) => setWorkExperience(e.target.value)} />
+        </div>
+        <div className="p-field" style = {{ marginTop: '50px'}}>
+          <label htmlFor="projectAccess" >Project Access</label>
+          <InputText id="projectAccess" style = {{width: '100%'}} value={projectAccess} onChange={(e) => setProjectAccess(e.target.value)} />
+        </div>
+  
+        <div className="p-field" style = {{ marginTop: '50px'}}>
+          <Button label="Generate CV (PDF)" icon="pi pi-file-pdf" />
+          <Button label="Generate CV (DOCX)" icon="pi pi-file-word" className="p-button-secondary" style={{ marginLeft: '1rem' }} />
         </div>
       </div>
     </div>
+    
   );
 };
 
 export default EmployeeForm;
+
 
