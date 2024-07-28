@@ -788,5 +788,3 @@ const endContent = (
 };
 
 export default EmployeeForm;
-
-

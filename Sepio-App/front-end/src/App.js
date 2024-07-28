@@ -2,12 +2,16 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import RootView from './components/RootView';
+import Login from './components/Login';
+import SignUp from './components/SignUp';
 import 'primereact/resources/themes/saga-blue/theme.css';  // Theme
 import 'primereact/resources/primereact.min.css';           // Core CSS
 import 'primeicons/primeicons.css';
 import '@coreui/coreui/dist/css/coreui.min.css';
 
 function App() {
+
+  
 
 
   return (
@@ -16,9 +20,9 @@ function App() {
         <div className="App">
           <Routes>
 
-
-            
-            <Route path='/' element={<RootView/>} />
+             <Route path = '/signup' element = {<SignUp/>}/>
+            <Route path = '/login' element = {<Login/>}/>
+            <Route path='/' element={<RootView />} />
           
           
           </Routes>
