@@ -1559,29 +1559,28 @@ const EmployeeForm = ({ icon_username }) => {
           <Fab style={{ backgroundColor: '#007bff' }} color="primary" aria-label="add">
             <LooksTwoIcon />
           </Fab>
-          <Card title="Work Experience" style={{ marginBottom: '2rem' }}>
+          <Card title="Professional Details" style={{ marginBottom: '2rem' }}>
             <Form layout="vertical">
-              <Form.Item>
+              <Form.Item label = 'Work Experience'>
                 <Input.TextArea value={workExperience} onChange={(e) => setWorkExperience(e.target.value)} rows={4} />
               </Form.Item>
-            </Form>
-          </Card>
-          <Fab style={{ backgroundColor: '#007bff' }} color="primary" aria-label="add">
-            <Looks3Icon />
-          </Fab>
-          <Card title="Project Access" style={{ marginBottom: '2rem' }}>
-            <Form layout="vertical">
-              <Form.Item>
-                <Input.TextArea value={projectAccess} onChange={(e) => setProjectAccess(e.target.value)} rows={4} />
+              <Form.Item label = 'Project Access'>
+                <Input value={projectAccess} onChange={(e) => setProjectAccess(e.target.value)} rows={4} />
               </Form.Item>
             </Form>
           </Card>
+          
+          
+              {/* <Form.Item>
+                <Input value={projectAccess} onChange={(e) => setProjectAccess(e.target.value)} rows={4} />
+              </Form.Item> */}
+            
           <Fab style={{ backgroundColor: '#007bff' }} color="primary" aria-label="add">
             <Looks3Icon />
           </Fab>
           <Card title="Goals" style={{ marginBottom: '2rem' }}>
             <Form layout="vertical">
-              <Form.Item>
+              <Form.Item label = {'Personal Goals'}>
                 <Input.TextArea value={goals} onChange={(e) => setGoals(e.target.value)} rows={4} />
               </Form.Item>
             </Form>
