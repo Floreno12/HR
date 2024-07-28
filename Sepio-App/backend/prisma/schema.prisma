@@ -7,11 +7,17 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum Privileges {
+  MANAGER
+  EMPLOYEE
+}
+
 model user {
   id        Int    @id @default(autoincrement())
   name      String @unique
   password  String
   education String
+  privileges Privileges
 }
 
 

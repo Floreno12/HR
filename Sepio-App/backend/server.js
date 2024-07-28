@@ -13,10 +13,26 @@ app.use(bodyParser.json());
 
 
 
+app.get('/api/user/:username', async (req, res) => {
+  const {username} = req.params;
 
 
 
+  try{
+    const user = await prisma.user.findUnique({
+      where: {name: username},
+    });
 
+    if(!user){
+      return res.status(404).json({message: 'User not found'});
+    }
+
+    res.json({privileges: user.privileges});
+  }catch (error){
+    console.error('Error message');
+    res.status(500).json({message: 'Database error'});
+  }
+})
 
 app.post('/signup', async (req, res) => {
   const { username, password} = req.body;

@@ -565,7 +565,7 @@
 
 
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'antd/dist/reset.css'; // Import Ant Design CSS
 import { Input, Select,  Card, Avatar, Layout, Form, Row, Col, Tooltip } from 'antd';
 import { PlusOutlined, SaveOutlined, SearchOutlined, UserOutlined, FilePdfOutlined, FileWordOutlined } from '@ant-design/icons';
@@ -582,6 +582,7 @@ const { Header, Sider, Content } = Layout;
 const { Option } = Select;
 
 const EmployeeForm = ( {icon_username}) => {
+  const [userPrivileges, setUserPrivileges] = useState(null);
   const [type, setType] = useState(null);
   const [skills, setSkills] = useState('');
   const [education, setEducation] = useState('');
@@ -591,6 +592,30 @@ const EmployeeForm = ( {icon_username}) => {
   const [goals, setGoals] = useState('');
 
   const types = ['Employee', 'Contractor'];
+
+
+
+
+  useEffect(() => {
+		if (icon_username) {
+			fetch(`/api/user/${icon_username}`)
+				.then(response => response.json())
+				.then(data => {
+					setUserPrivileges(data.privileges);
+          console.log(data.privileges);
+					setTimeout(() => {
+						
+					}, 100);
+				})
+				.catch(error => {
+					console.log('Error fetching user privileges', error);
+					
+				});
+		}
+	}, [icon_username]);
+
+
+
 
 
 
@@ -684,6 +709,7 @@ const endContent = (
               <i className="pi pi-cog" style={{ marginRight: '0.5rem' }}></i> Settings
             </button>
           </li>
+          {userPrivileges === 'MANAGER' &&(
           <li style={{ marginBottom: '1rem', width: '100%' }}>
             <button
               style={{
@@ -699,6 +725,7 @@ const endContent = (
               <i className="pi pi-user" style={{ marginRight: '0.5rem' }}></i> Employees
             </button>
           </li>
+          )}
 
 
 
