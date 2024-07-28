@@ -143,13 +143,16 @@ import 'antd/dist/reset.css';
 
 const { Title } = Typography;
 
-const LoginPage = ({ setUsername }) => {
+const LoginPage = () => {
   //   const onFinish = (values) => {
   //   console.log('Received values of form: ', values);
   // };
   const navigate = useNavigate();
   const [data, setData] = useState({ name: '', password: '' });
   const toast = useRef(null);
+
+
+
 
   const showSuccess = (message) => {
     if (toast.current) {
@@ -164,6 +167,9 @@ const LoginPage = ({ setUsername }) => {
     }
   };
 
+
+
+
   const handleSubmit = async (values) => {
     try {
       const response = await axios.post('/login', {
@@ -172,14 +178,17 @@ const LoginPage = ({ setUsername }) => {
       });
 
       if (response.data.success) {
-        showSuccess('Login successful');
-        setUsername(values.name);
+
+        showSuccess('Success')
+       
+       console.log('i get the success');
         navigate('/');
       } else {
-        showError(response.data.message || 'Authentication failed');
+        showError('Authentication failed')
+        console.log('bad uthenticate')
       }
     } catch (error) {
-      showError('An error occurred. Please try again.');
+      showError('Authentication failed')
       console.error('Error:', error);
     }
   };
@@ -199,7 +208,9 @@ const LoginPage = ({ setUsername }) => {
       alignItems: 'center',
       background: '#e6f7ff'
     }}>
-      <Toast ref={toast} />
+
+      <Toast ref= {toast}/>
+      
       <Card style={{
         width: 400,
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
