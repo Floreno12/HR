@@ -581,7 +581,7 @@ import { Toolbar } from 'primereact/toolbar';
 const { Header, Sider, Content } = Layout;
 const { Option } = Select;
 
-const EmployeeForm = () => {
+const EmployeeForm = ( {icon_username}) => {
   const [type, setType] = useState(null);
   const [skills, setSkills] = useState('');
   const [education, setEducation] = useState('');
@@ -650,7 +650,7 @@ const endContent = (
       <Sider width={300} style={{ backgroundColor: '#007bff', color: '#fff' }}>
         <div style={{ padding: '1rem', textAlign: 'center' }}>
           <Avatar size={100} icon={<UserOutlined />} style={{ marginBottom: '1rem' }} />
-          <h3>Denis Gaidai</h3>
+          <h3>{icon_username}</h3>
         </div>
         <ul style={{ listStyleType: 'none', padding: 0 }}>
         <li style={{ marginBottom: '1rem', width: '100%' }}>
@@ -684,6 +684,24 @@ const endContent = (
               <i className="pi pi-cog" style={{ marginRight: '0.5rem' }}></i> Settings
             </button>
           </li>
+          <li style={{ marginBottom: '1rem', width: '100%' }}>
+            <button
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#fff',
+                textAlign: 'left',
+                width: '100%',
+                padding: '0.5rem 1rem',
+                cursor: 'pointer',
+              }}
+            >
+              <i className="pi pi-user" style={{ marginRight: '0.5rem' }}></i> Employees
+            </button>
+          </li>
+
+
+
           <li style={{ marginBottom: '1rem', width: '100%' }}>
             <button
               style={{

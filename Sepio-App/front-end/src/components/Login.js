@@ -143,7 +143,7 @@ import 'antd/dist/reset.css';
 
 const { Title } = Typography;
 
-const LoginPage = () => {
+export default function LoginPage ({setUsername}) {
   //   const onFinish = (values) => {
   //   console.log('Received values of form: ', values);
   // };
@@ -180,9 +180,9 @@ const LoginPage = () => {
       if (response.data.success) {
 
         showSuccess('Success')
-       
+       setUsername(values.name)
        console.log('i get the success');
-        navigate('/');
+        navigate('/hrsystem');
       } else {
         showError('Authentication failed')
         console.log('bad uthenticate')
@@ -272,5 +272,5 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useLocalStorage } from './hooks/useLocalStorage';
 import RootView from './components/RootView';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
@@ -11,6 +12,7 @@ import '@coreui/coreui/dist/css/coreui.min.css';
 
 function App() {
 
+  const [icon_username, setUsername] = useLocalStorage('');
   
 
 
@@ -20,9 +22,9 @@ function App() {
         <div className="App">
           <Routes>
 
-             <Route path = '/signup' element = {<SignUp/>}/>
-            <Route path = '/login' element = {<Login/>}/>
-            <Route path='/' element={<RootView />} />
+             <Route path = '/' element = {<SignUp/>}/>
+            <Route path = '/login' element = {<Login setUsername={setUsername}/>}/>
+            <Route path='/hrsystem' element={<RootView icon_username = {icon_username} />} />
           
           
           </Routes>
