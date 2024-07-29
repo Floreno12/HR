@@ -1936,6 +1936,10 @@ const EmployeeForm = ({ icon_username }) => {
 
   }
 
+  function logout () {
+    navigate('/login')
+  }
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider width={300} style={{ backgroundColor: '#007bff', color: '#fff' }}>
@@ -2006,12 +2010,13 @@ const EmployeeForm = ({ icon_username }) => {
                 cursor: 'pointer',
               }}
             >
-              <i className="pi pi-user" style={{ marginRight: '0.5rem' }}></i> invoices
+              <i className="pi pi-wallet" style={{ marginRight: '0.5rem' }}></i> invoices
             </button>
           </li>
 
           <li style={{ marginBottom: '1rem', width: '100%' }}>
             <button
+            onClick = {logout}
               style={{
                 background: 'none',
                 border: 'none',

@@ -157,7 +157,8 @@ app.post('/signup', async (req, res) => {
         name: username,
         password: hashedPassword,
         education: '',
-        privileges: 'MANAGER'
+        privileges: 'MANAGER',
+        email: 'user@gmail.com'
       },
     });
     console.log('User created successfully', newUser);

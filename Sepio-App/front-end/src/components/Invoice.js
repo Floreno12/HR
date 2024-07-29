@@ -395,12 +395,13 @@ import { InputIcon } from 'primereact/inputicon';
 import { InputText } from 'primereact/inputtext';
 import { Toolbar } from 'primereact/toolbar';
 import axios from 'axios';
-
+import { useNavigate, NavLink } from 'react-router-dom';
 const { Sider, Content } = Layout;
 
 const Invoice = () => {
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch users from the API
@@ -462,6 +463,11 @@ const Invoice = () => {
     </>
   );
 
+
+  function logout () {
+    navigate('/login')
+  }
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider width={300} style={{ backgroundColor: '#007bff', color: '#fff' }}>
@@ -515,8 +521,27 @@ const Invoice = () => {
               <i className="pi pi-user" style={{ marginRight: '0.5rem' }}></i> Employees
             </button>
           </li>
+
           <li style={{ marginBottom: '1rem', width: '100%' }}>
             <button
+            
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#fff',
+                textAlign: 'left',
+                width: '100%',
+                padding: '0.5rem 1rem',
+                cursor: 'pointer',
+              }}
+            >
+              <i className="pi pi-wallet" style={{ marginRight: '0.5rem' }}></i> invoices
+            </button>
+          </li>
+        
+          <li style={{ marginBottom: '1rem', width: '100%' }}>
+            <button
+            onClick = {logout}
               style={{
                 background: 'none',
                 border: 'none',
@@ -530,6 +555,7 @@ const Invoice = () => {
               <i className="pi pi-sign-out" style={{ marginRight: '0.5rem' }}></i> Logout
             </button>
           </li>
+          
         </ul>
       </Sider>
       <Layout>
@@ -556,7 +582,7 @@ const Invoice = () => {
                     />
                   }
                   title={<div style={{ display: 'flex', alignItems: 'center' }}><span style={{ marginLeft: 8 }}>{user.name}</span></div>}
-                  description={`Email: ${user.email}`}
+                  description={ <div style = {{marginTop: '-25px'}}>Email: {user.email}</div>}
                 />
               </List.Item>
             )}
