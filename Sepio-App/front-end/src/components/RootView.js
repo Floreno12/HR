@@ -1133,7 +1133,6 @@
 
 
 
-
 import React, { useState, useEffect } from 'react';
 import 'antd/dist/reset.css'; // Import Ant Design CSS
 import { Input, Select, Card, Avatar, Layout, Form, Row, Col, Tooltip, Button as AntButton, Dropdown, Menu } from 'antd';
@@ -1150,12 +1149,13 @@ import { Toolbar } from 'primereact/toolbar';
 import { jsPDF } from "jspdf";
 import { Document, Packer, Paragraph, TextRun, AlignmentType } from "docx";
 import { saveAs } from "file-saver";
-
+import { useNavigate, NavLink } from 'react-router-dom';
 
 const { Header, Sider, Content } = Layout;
 const { Option } = Select;
 
 const EmployeeForm = ({ icon_username }) => {
+  const navigate = useNavigate();
   const [userPrivileges, setUserPrivileges] = useState(null);
   const [type, setType] = useState(null);
   const [skills, setSkills] = useState('');
@@ -1433,6 +1433,11 @@ const EmployeeForm = ({ icon_username }) => {
     />
   );
 
+   function handle () {
+   navigate('/invoice')
+
+  }
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider width={300} style={{ backgroundColor: '#007bff', color: '#fff' }}>
@@ -1489,6 +1494,23 @@ const EmployeeForm = ({ icon_username }) => {
               </button>
             </li>
           )}
+
+<li style={{ marginBottom: '1rem', width: '100%' }}>
+            <button
+            onClick = {handle}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#fff',
+                textAlign: 'left',
+                width: '100%',
+                padding: '0.5rem 1rem',
+                cursor: 'pointer',
+              }}
+            >
+              <i className="pi pi-user" style={{ marginRight: '0.5rem' }}></i> invoices
+            </button>
+          </li>
 
           <li style={{ marginBottom: '1rem', width: '100%' }}>
             <button

@@ -2,8 +2,11 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const { PrismaClient } = require('@prisma/client');
-const app = express();
+const axios = require('axios');
+const nodeHtmlToImage = require('node-html-to-image');
 const bcrypt = require('bcrypt');
+const app = express();
+const puppeteer = require('puppeteer');
 const prisma = new PrismaClient();
 const PORT = process.env.PORT || 3000;
 
@@ -11,6 +14,100 @@ const PORT = process.env.PORT || 3000;
 app.use(bodyParser.json());
 
 
+
+const parseTimeEstimate = (estimate) => {
+  const timeParts = estimate.split(' ');
+  let hours = 0;
+
+  timeParts.forEach(part => {
+    if (part.endsWith('d')) {
+      // Convert days to hours (assume 8 hours per day)
+      hours += parseInt(part, 10) * 8;
+    } else if (part.endsWith('h')) {
+      hours += parseInt(part, 10);
+    }
+  });
+
+  return hours;
+};
+
+app.post('/api/generate-invoice', async (req, res) => {
+  const { employeeName } = req.body;
+
+  try {
+    // Find the employee in the database
+    const employee = await prisma.user.findUnique({ where: { name: employeeName } });
+    if (!employee) {
+      return res.status(404).json({ error: 'Employee not found' });
+    }
+
+    // Fetch all tasks from Jira (including completed tasks)
+    const response = await axios.get(JIRA_API_URL, {
+      params: {
+        jql: `assignee="${employeeName}"`, // Removed status filter to include all tasks
+        fields: 'summary,timetracking',
+        maxResults: 1000 // Adjust as needed
+      },
+      headers: {
+        Authorization: `Basic ${Buffer.from(`${JIRA_USER_EMAIL}:${JIRA_API_TOKEN}`).toString('base64')}`,
+        Accept: 'application/json',
+      },
+    });
+
+    // Log entire response to debug
+    console.log('Jira API Response:', JSON.stringify(response.data, null, 2));
+
+    if (!response.data.issues || response.data.issues.length === 0) {
+      return res.status(500).json({ error: 'No issues found for the employee in Jira' });
+    }
+
+    // Process the Jira response
+    let totalHours = 0;
+    const tasks = response.data.issues.map((issue) => {
+      const originalEstimate = issue.fields.timetracking?.originalEstimate || '0h';
+      const hours = parseTimeEstimate(originalEstimate);
+      totalHours += hours;
+
+      return {
+        title: issue.fields.summary,
+        originalEstimate: originalEstimate,
+      };
+    });
+
+    const hourlyRate = 10; // $10 per hour
+    const totalAmount = totalHours * hourlyRate;
+
+    // Create invoice content
+    const invoiceContent = tasks.map((task) => {
+      return `Task: ${task.title}, Time: ${task.originalEstimate}`;
+    }).join('<br>') + `<br><br>Total Hours: ${totalHours}h<br>Total Amount: $${totalAmount}`;
+
+    // Generate invoice HTML
+    const invoiceHtml = `
+      <html>
+        <body>
+          <h1>Invoice for ${employeeName}</h1>
+          <p>${invoiceContent}</p>
+        </body>
+      </html>
+    `;
+
+    // Generate PNG from HTML
+    const imagePath = path.join(__dirname, 'invoice.png');
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.setContent(invoiceHtml);
+    await page.screenshot({ path: imagePath });
+
+    await browser.close();
+
+    // Respond with the URL of the generated invoice
+    res.json({ invoiceUrl: `http://localhost:${PORT}/invoice.png` });
+  } catch (error) {
+    console.error('Error generating invoice:', error.response ? error.response.data : error.message);
+    res.status(500).json({ error: 'Failed to generate invoice' });
+  }
+});
 
 
 app.get('/api/user/:username', async (req, res) => {
@@ -46,7 +143,8 @@ app.post('/signup', async (req, res) => {
       data: {
         name: username,
         password: hashedPassword,
-        education: ''
+        education: '',
+        privileges: 'MANAGER'
       },
     });
     console.log('User created successfully', newUser);
@@ -170,8 +268,7 @@ app.post('/employees', async (req, res) => {
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '../front-end/build')));
-
-// Serve React app for any other routes
+app.use('/invoice.png', express.static(path.join(__dirname, 'invoice.png')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../front-end/build/index.html'));
 });
@@ -182,3 +279,12 @@ app.listen(PORT, () => {
 
 
 //
+
+
+
+
+
+
+
+
+
