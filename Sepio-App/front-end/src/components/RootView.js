@@ -1711,7 +1711,7 @@ const EmployeeForm = ({ icon_username }) => {
   
     // Get the page width to center the title
     const pageWidth = doc.internal.pageSize.getWidth();
-    const title = 'Employee Information';
+    const title = `Employee Information ${icon_username}`;
   
     // Calculate the text width to center it
     const textWidth = doc.getTextWidth(title);
@@ -1828,7 +1828,7 @@ const EmployeeForm = ({ icon_username }) => {
               alignment: AlignmentType.CENTER,
               children: [
                 new TextRun({
-                  text: "Employee Information",
+                  text: `Employee Information ${icon_username}`,
                   bold: true,
                   size: 32,
                 }),
