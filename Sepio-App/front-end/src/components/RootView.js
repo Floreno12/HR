@@ -1133,6 +1133,504 @@
 
 
 
+// import React, { useState, useEffect } from 'react';
+// import 'antd/dist/reset.css'; // Import Ant Design CSS
+// import { Input, Select, Card, Avatar, Layout, Form, Row, Col, Tooltip, Button as AntButton, Dropdown, Menu } from 'antd';
+// import { PlusOutlined, SaveOutlined, SearchOutlined, UserOutlined, FilePdfOutlined, FileWordOutlined } from '@ant-design/icons';
+// import LooksOneIcon from '@mui/icons-material/LooksOne';
+// import { Button as PrimeButton } from 'primereact/button';
+// import Fab from '@mui/material/Fab';
+// import Looks3Icon from '@mui/icons-material/Looks3';
+// import LooksTwoIcon from '@mui/icons-material/LooksTwo';
+// import { IconField } from 'primereact/iconfield';
+// import { InputIcon } from 'primereact/inputicon';
+// import { InputText } from 'primereact/inputtext';
+// import { Toolbar } from 'primereact/toolbar';
+// import { jsPDF } from "jspdf";
+// import { Document, Packer, Paragraph, TextRun, AlignmentType } from "docx";
+// import { saveAs } from "file-saver";
+// import { useNavigate, NavLink } from 'react-router-dom';
+
+// const { Header, Sider, Content } = Layout;
+// const { Option } = Select;
+
+// const EmployeeForm = ({ icon_username }) => {
+//   const navigate = useNavigate();
+//   const [userPrivileges, setUserPrivileges] = useState(null);
+//   const [type, setType] = useState(null);
+//   const [skills, setSkills] = useState('');
+//   const [education, setEducation] = useState('');
+//   const [workExperience, setWorkExperience] = useState('');
+//   const [rate, setRate] = useState('');
+//   const [projectAccess, setProjectAccess] = useState('');
+//   const [goals, setGoals] = useState('');
+
+//   const types = ['Employee', 'Contractor'];
+
+//   useEffect(() => {
+//     if (icon_username) {
+//       fetch(`/api/user/${icon_username}`)
+//         .then(response => response.json())
+//         .then(data => {
+//           setUserPrivileges(data.privileges);
+//           console.log(data.privileges);
+//           setTimeout(() => {
+
+//           }, 100);
+//         })
+//         .catch(error => {
+//           console.log('Error fetching user privileges', error);
+
+//         });
+//     }
+//   }, [icon_username]);
+
+
+//   const handleMenuClick = (e) => {
+//     if (e.key === 'pdf') {
+//       generatePDF();
+//     } else if (e.key === 'docx') {
+//       generateDOCX();
+//     }
+//   };
+
+//   // const generatePDF = () => {
+//   //   const doc = new jsPDF();
+//   //   doc.text('Employee Information', 10, 10);
+//   //   doc.text(`Skills: ${skills}`, 10, 20);
+//   //   doc.text(`Education: ${education}`, 10, 30);
+//   //   doc.text(`Rate: ${rate}`, 10, 40);
+//   //   doc.text(`Type: ${type}`, 10, 50);
+//   //   doc.text(`Work Experience: ${workExperience}`, 10, 60);
+//   //   doc.text(`Project Access: ${projectAccess}`, 10, 70);
+//   //   doc.text(`Goals: ${goals}`, 10, 80);
+//   //   doc.save('employee_information.pdf');
+//   // };
+
+
+//   const generatePDF = () => {
+//     const doc = new jsPDF();
+  
+//     // Get the page width to center the title
+//     const pageWidth = doc.internal.pageSize.getWidth();
+//     const title = 'Employee Information';
+  
+//     // Calculate the text width to center it
+//     const textWidth = doc.getTextWidth(title);
+//     const x = (pageWidth - textWidth) / 2;
+  
+//     // Add the centered title
+//     doc.setFontSize(20);
+//     doc.setFont('helvetica', 'bold');
+//     doc.text(title, x, 10);
+  
+//     // Define a helper function to add a section with a header
+//     const addSection = (header, content, y) => {
+//       doc.setFontSize(16); // Set font size for the header
+//       doc.setFont('helvetica', 'bold'); // Set font style to bold
+//       doc.text(header, 10, y); // Add header text
+  
+//       doc.setFontSize(12); // Reset font size for the content
+//       doc.setFont('helvetica', 'normal'); // Reset font style to normal
+//       doc.text(content || '', 10, y + 10); // Add content text
+//     };
+  
+//     let y = 30;
+//     addSection('Skills', skills, y);
+//     y += 20; // Adjust y position for the next section
+  
+//     addSection('Education', education, y);
+//     y += 20;
+  
+//     addSection('Rate', rate, y);
+//     y += 20;
+  
+//     addSection('Type', type, y);
+//     y += 20;
+  
+//     addSection('Work Experience', workExperience, y);
+//     y += 20;
+  
+//     addSection('Project Access', projectAccess, y);
+//     y += 20;
+  
+//     addSection('Goals', goals, y);
+  
+//     doc.save('employee_information.pdf');
+//   };
+  
+  
+
+
+
+//   // const generateDOCX = () => {
+//   //   const doc = new Document({
+//   //     sections: [
+//   //       {
+//   //         properties: {},
+//   //         children: [
+//   //           new Paragraph({
+//   //             children: [
+//   //               new TextRun("Employee Information"),
+//   //             ],
+//   //           }),
+//   //           new Paragraph({
+//   //             children: [
+//   //               new TextRun(`Skills: ${skills}`),
+//   //             ],
+//   //           }),
+//   //           new Paragraph({
+//   //             children: [
+//   //               new TextRun(`Education: ${education}`),
+//   //             ],
+//   //           }),
+//   //           new Paragraph({
+//   //             children: [
+//   //               new TextRun(`Rate: ${rate}`),
+//   //             ],
+//   //           }),
+//   //           new Paragraph({
+//   //             children: [
+//   //               new TextRun(`Type: ${type}`),
+//   //             ],
+//   //           }),
+//   //           new Paragraph({
+//   //             children: [
+//   //               new TextRun(`Work Experience: ${workExperience}`),
+//   //             ],
+//   //           }),
+//   //           new Paragraph({
+//   //             children: [
+//   //               new TextRun(`Project Access: ${projectAccess}`),
+//   //             ],
+//   //           }),
+//   //           new Paragraph({
+//   //             children: [
+//   //               new TextRun(`Goals: ${goals}`),
+//   //             ],
+//   //           }),
+//   //         ],
+//   //       },
+//   //     ],
+//   //   });
+
+//   //   Packer.toBlob(doc).then((blob) => {
+//   //     saveAs(blob, "employee_information.docx");
+//   //   });
+//   // };
+
+
+//   const generateDOCX = () => {
+//     const doc = new Document({
+//       sections: [
+//         {
+//           properties: {},
+//           children: [
+//             new Paragraph({
+//               alignment: AlignmentType.CENTER,
+//               children: [
+//                 new TextRun({
+//                   text: "Employee Information",
+//                   bold: true,
+//                   size: 32,
+//                 }),
+//               ],
+//             }),
+//             ...[
+//               { header: 'Skills', content: skills },
+//               { header: 'Education', content: education },
+//               { header: 'Rate', content: rate },
+//               { header: 'Type', content: type },
+//               { header: 'Work Experience', content: workExperience },
+//               { header: 'Project Access', content: projectAccess },
+//               { header: 'Goals', content: goals },
+//             ].map((section) => [
+//               new Paragraph({
+//                 spacing: {
+//                   before: 200,
+//                 },
+//                 children: [
+//                   new TextRun({
+//                     text: section.header,
+//                     bold: true,
+//                     size: 24,
+//                   }),
+//                 ],
+//               }),
+//               new Paragraph({
+//                 children: [
+//                   new TextRun({
+//                     text: section.content,
+//                     size: 24,
+//                   }),
+//                 ],
+//               }),
+//             ]).flat(),
+//           ],
+//         },
+//       ],
+//     });
+  
+//     Packer.toBlob(doc).then((blob) => {
+//       saveAs(blob, "employee_information.docx");
+//     });
+//   };
+  
+
+//   const menu = (
+//     <Menu onClick={handleMenuClick}>
+//       <Menu.Item key="pdf" icon={<FilePdfOutlined />}>
+//         Generate CV (PDF)
+//       </Menu.Item>
+//       <Menu.Item key="docx" icon={<FileWordOutlined />}>
+//         Generate CV (DOCX)
+//       </Menu.Item>
+//     </Menu>
+//   );
+
+//   const items = [
+//     {
+//       label: 'Update',
+//       icon: 'pi pi-refresh'
+//     },
+//     {
+//       label: 'Delete',
+//       icon: 'pi pi-times'
+//     }
+//   ];
+
+//   const startContent = (
+//     <React.Fragment>
+//       <PrimeButton icon="pi pi-plus" style={{ backgroundColor: '#007bff', borderRadius: '5px 0px 0px 5px', color: 'white', }} className="mr-2" />
+//       <Dropdown overlay={menu} trigger={['click']}>
+//         <PrimeButton icon="pi pi-upload" style={{ backgroundColor: '#007bff', borderRadius: '0 5px 5px 0', color: 'white', }} />
+//       </Dropdown>
+//     </React.Fragment>
+//   );
+
+//   const centerContent = (
+//     <>
+//       <IconField iconPosition="left">
+//         <InputIcon className="pi pi-search" />
+//         <InputText placeholder="Search" />
+//       </IconField>
+//       {/* <img src="https://ven07222.service-now.com/x_llll2_insearch_f.inCloudLogicLogo.png" width="52" height="52" alt="Logo" /> */}
+//     </>
+//   );
+
+//   const endContent = (
+//     <PrimeButton
+//       label="Save"
+//       model={items}
+//       icon="pi pi-check"
+//       style={{
+//         color: 'white',
+//         backgroundColor: '#007bff',
+//         border: 'none',
+//         borderRadius: '5px 5px 5px 5px' // Optional: Removes the border
+//         // Optional: Sets the text color
+//       }}
+//     />
+//   );
+
+//    function handle () {
+//    navigate('/invoice')
+
+//   }
+
+//   return (
+//     <Layout style={{ minHeight: '100vh' }}>
+//       <Sider width={300} style={{ backgroundColor: '#007bff', color: '#fff' }}>
+//         <div style={{ padding: '1rem', textAlign: 'center' }}>
+//           <Avatar size={100} icon={<UserOutlined />} style={{ marginBottom: '1rem' }} />
+//           <h3>{icon_username}</h3>
+//         </div>
+//         <ul style={{ listStyleType: 'none', padding: 0 }}>
+//           <li style={{ marginBottom: '1rem', width: '100%' }}>
+//             <button
+//               style={{
+
+//                 background: 'none',
+//                 border: 'none',
+//                 color: '#fff',
+//                 textAlign: 'left',
+//                 width: '100%',
+//                 padding: '0.5rem 1rem',
+//                 cursor: 'pointer',
+//               }}
+//             >
+//               <i className="pi pi-home" style={{ marginRight: '0.5rem' }}></i> Dashboard
+//             </button>
+//           </li>
+//           <li style={{ marginBottom: '1rem', width: '100%' }}>
+//             <button
+//               style={{
+//                 background: 'none',
+//                 border: 'none',
+//                 color: '#fff',
+//                 textAlign: 'left',
+//                 width: '100%',
+//                 padding: '0.5rem 1rem',
+//                 cursor: 'pointer',
+//               }}
+//             >
+//               <i className="pi pi-cog" style={{ marginRight: '0.5rem' }}></i> Settings
+//             </button>
+//           </li>
+//           {userPrivileges === 'MANAGER' && (
+//             <li style={{ marginBottom: '1rem', width: '100%' }}>
+//               <button
+//                 style={{
+//                   background: 'none',
+//                   border: 'none',
+//                   color: '#fff',
+//                   textAlign: 'left',
+//                   width: '100%',
+//                   padding: '0.5rem 1rem',
+//                   cursor: 'pointer',
+//                 }}
+//               >
+//                 <i className="pi pi-user" style={{ marginRight: '0.5rem' }}></i> Employees
+//               </button>
+//             </li>
+//           )}
+
+// <li style={{ marginBottom: '1rem', width: '100%' }}>
+//             <button
+//             onClick = {handle}
+//               style={{
+//                 background: 'none',
+//                 border: 'none',
+//                 color: '#fff',
+//                 textAlign: 'left',
+//                 width: '100%',
+//                 padding: '0.5rem 1rem',
+//                 cursor: 'pointer',
+//               }}
+//             >
+//               <i className="pi pi-user" style={{ marginRight: '0.5rem' }}></i> invoices
+//             </button>
+//           </li>
+
+//           <li style={{ marginBottom: '1rem', width: '100%' }}>
+//             <button
+//               style={{
+//                 background: 'none',
+//                 border: 'none',
+//                 color: '#fff',
+//                 textAlign: 'left',
+//                 width: '100%',
+//                 padding: '0.5rem 1rem',
+//                 cursor: 'pointer',
+//               }}
+//             >
+//               <i className="pi pi-sign-out" style={{ marginRight: '0.5rem' }}></i> Logout
+//             </button>
+//           </li>
+//         </ul>
+//       </Sider>
+//       <Layout>
+//         {/* <Header style={{ background: '#fff', padding: '0 1rem' }}>
+//           <Row justify="space-between">
+//             <Col>
+//               <Button icon={<PlusOutlined />} type="primary" style={{ marginRight: '0.5rem' }}>New</Button>
+//               <Button icon={<SaveOutlined />} type="primary">Save</Button>
+//             </Col>
+//             <Col>
+//               <Input prefix={<SearchOutlined />} placeholder="Search" style={{ width: 200 }} />
+//             </Col>
+//           </Row>
+//         </Header> */}
+//         <Toolbar start={startContent} center={centerContent} end={endContent} />
+//         <Content style={{ padding: '1rem' }}>
+//           <Fab style={{ marginTop: '20px', backgroundColor: '#007bff' }} color="primary" aria-label="add">
+//             <LooksOneIcon />
+//           </Fab>
+//           <Card title="Personal Information" style={{ marginBottom: '2rem' }}>
+//             <Form layout="vertical">
+//               <Row gutter={16}>
+//                 <Col span={12}>
+//                   <Form.Item label="Skills">
+//                     <Input value={skills} onChange={(e) => setSkills(e.target.value)} rows = {4} />
+//                   </Form.Item>
+//                 </Col>
+//                 <Col span={12}>
+//                   <Form.Item label="Education">
+//                     <Input value={education} onChange={(e) => setEducation(e.target.value)} rows = {4} />
+//                   </Form.Item>
+//                 </Col>
+//               </Row>
+//               <Row gutter={16}>
+//                 <Col span={12}>
+//                   <Form.Item label="Rate">
+//                     <Input value={rate} onChange={(e) => setRate(e.target.value)} rows = {4} />
+//                   </Form.Item>
+//                 </Col>
+//                 <Col span={12}>
+//                   <Form.Item label="Type">
+//                     <Select value={type} onChange={setType} placeholder="Select Type">
+//                       {types.map(t => (
+//                         <Option key={t} value={t}>{t}</Option>
+//                       ))}
+//                     </Select>
+//                   </Form.Item>
+//                 </Col>
+//               </Row>
+//             </Form>
+//           </Card>
+//           <Fab style={{ backgroundColor: '#007bff' }} color="primary" aria-label="add">
+//             <LooksTwoIcon />
+//           </Fab>
+//           <Card title="Professional Details" style={{ marginBottom: '2rem' }}>
+//             <Form layout="vertical">
+//               <Form.Item label = 'Work Experience'>
+//                 <Input.TextArea value={workExperience} onChange={(e) => setWorkExperience(e.target.value)} rows={4} />
+//               </Form.Item>
+//               <Form.Item label = 'Project Access'>
+//                 <Input value={projectAccess} onChange={(e) => setProjectAccess(e.target.value)} rows={4} />
+//               </Form.Item>
+//             </Form>
+//           </Card>
+          
+          
+//               {/* <Form.Item>
+//                 <Input value={projectAccess} onChange={(e) => setProjectAccess(e.target.value)} rows={4} />
+//               </Form.Item> */}
+            
+//           <Fab style={{ backgroundColor: '#007bff' }} color="primary" aria-label="add">
+//             <Looks3Icon />
+//           </Fab>
+//           <Card title="Goals" style={{ marginBottom: '2rem' }}>
+//             <Form layout="vertical">
+//               <Form.Item label = {'Personal Goals'}>
+//                 <Input.TextArea value={goals} onChange={(e) => setGoals(e.target.value)} rows={4} />
+//               </Form.Item>
+//             </Form>
+//           </Card>
+//         </Content>
+//       </Layout>
+//     </Layout>
+//   );
+// };
+
+// export default EmployeeForm;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import React, { useState, useEffect } from 'react';
 import 'antd/dist/reset.css'; // Import Ant Design CSS
 import { Input, Select, Card, Avatar, Layout, Form, Row, Col, Tooltip, Button as AntButton, Dropdown, Menu } from 'antd';

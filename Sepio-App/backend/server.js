@@ -14,6 +14,19 @@ const PORT = process.env.PORT || 3000;
 app.use(bodyParser.json());
 
 
+// Add this endpoint to your existing Express server
+app.get('/api/users', async (req, res) => {
+  try {
+    const users = await prisma.user.findMany();
+    res.json(users);
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ error: 'Failed to fetch users' });
+  }
+});
+
+
+
 
 const parseTimeEstimate = (estimate) => {
   const timeParts = estimate.split(' ');
