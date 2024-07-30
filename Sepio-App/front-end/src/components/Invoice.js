@@ -403,6 +403,10 @@ const Invoice = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
+
+
+  
+
   useEffect(() => {
     // Fetch users from the API
     const fetchUsers = async () => {
@@ -431,6 +435,7 @@ const Invoice = () => {
       console.error('Error generating invoice:', error);
     }
   };
+  
 
   const filteredUsers = users.filter(user =>
     user.name.toLowerCase().includes(searchTerm)

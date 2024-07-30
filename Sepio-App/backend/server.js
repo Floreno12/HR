@@ -21,8 +21,6 @@ app.use(bodyParser.json());
 
 
 
-
-
 const parseTimeEstimate = (estimate) => {
   const timeParts = estimate.split(' ');
   let hours = 0;
@@ -86,7 +84,8 @@ app.post('/api/generate-invoice', async (req, res) => {
       };
     });
 
-    const hourlyRate = 10; // $10 per hour
+    // Fetch the hourly rate for the employee
+    const hourlyRate = employee.rate || 0; // Fetch hourly rate from database or default to 0
     const totalAmount = totalHours * hourlyRate;
 
     // Create invoice content
@@ -120,7 +119,6 @@ app.post('/api/generate-invoice', async (req, res) => {
     res.status(500).json({ error: 'Failed to generate invoice' });
   }
 });
-
 
 
 app.post('/signup', async (req, res) => {
