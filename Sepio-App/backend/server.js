@@ -193,33 +193,6 @@ app.get('/api/users', async (req, res) => {
 
 
 
-// app.post('/api/user/save', async (req, res) => {
-//   const { id, skills, education, rate, type, workExperience, projectAccess, personalGoals } = req.body;
-
-//   try {
-//     const updatedUser = await prisma.user.update({
-//       where: { id }, // Use the unique identifier
-//       data: {
-//         skills,
-//         education,
-//         rate,
-//         type,
-//         workExperience,
-//         projectAccess,
-//         personalGoals,
-//       },
-//     });
-
-//     res.json({ message: 'User data updated successfully', user: updatedUser });
-//   } catch (error) {
-//     console.error('Error updating user data:', error);
-//     res.status(500).json({ message: 'Database error' });
-//   }
-// });
-
-
-
-
 app.get('/api/user/:username', async (req, res) => {
   const { username } = req.params;
 
@@ -303,42 +276,6 @@ app.post('/api/user/save', async (req, res) => {
     res.status(500).json({ error: 'Error saving user data' });
   }
 });
-
-
-
-
-
-/////
-// app.get('/api/user/:username', async (req, res) => {
-//   const { username } = req.params;
-
-//   try {
-//     const user = await prisma.user.findUnique({
-//       where: { name: username },
-//       select: {
-//         privileges: true,
-//         skills: true,
-//         education: true,
-//         workExperience: true,
-//         rate: true,
-//         type: true,
-//         projectAccess: true,
-//         personalGoals: true
-//       }
-//     });
-
-//     if (!user) {
-//       return res.status(404).json({ message: 'User not found' });
-//     }
-
-//     res.json(user);
-//   } catch (error) {
-//     console.error('Error message:', error);
-//     res.status(500).json({ message: 'Database error' });
-//   }
-// });
-
-
 
 
 
