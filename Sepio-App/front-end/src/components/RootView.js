@@ -1630,40 +1630,731 @@
 
 
 
+// import React, { useState, useEffect } from 'react';
+// import 'antd/dist/reset.css'; // Import Ant Design CSS
+// import { Input, Select, Card, Avatar, Layout, Form, Row, Col, Tooltip, Button as AntButton, Dropdown, Menu } from 'antd';
+// import { UserOutlined, FilePdfOutlined, FileWordOutlined } from '@ant-design/icons';
+// import LooksOneIcon from '@mui/icons-material/LooksOne';
+// import { Button as PrimeButton } from 'primereact/button';
+// import Fab from '@mui/material/Fab';
+// import Looks3Icon from '@mui/icons-material/Looks3';
+// import LooksTwoIcon from '@mui/icons-material/LooksTwo';
+// import { IconField } from 'primereact/iconfield';
+// import { InputIcon } from 'primereact/inputicon';
+// import { InputText } from 'primereact/inputtext';
+// import { Toolbar } from 'primereact/toolbar';
+// import { useNavigate } from 'react-router-dom';
+
+// const { Header, Sider, Content } = Layout;
+// const { Option } = Select;
+
+// const EmployeeForm = ({ icon_username }) => {
+//   const navigate = useNavigate();
+//   const [userPrivileges, setUserPrivileges] = useState(null);
+//   const [type, setType] = useState(null);
+//   const [skills, setSkills] = useState('');
+//   const [education, setEducation] = useState('');
+//   const [workExperience, setWorkExperience] = useState('');
+//   const [rate, setRate] = useState('');
+//   const [projectAccess, setProjectAccess] = useState('');
+//   const [goals, setGoals] = useState('');
+
+//   const types = ['Employee', 'Contractor'];
+
+//   useEffect(() => {
+//     if (icon_username) {
+//       fetch(`/api/user/${icon_username}`)
+//         .then(response => response.json())
+//         .then(data => {
+//           setUserPrivileges(data.privileges);
+//           console.log(data.privileges);
+//           // Populate other fields if needed
+//         })
+//         .catch(error => {
+//           console.log('Error fetching user privileges', error);
+//         });
+//     }
+//   }, [icon_username]);
+
+//   const handleSave = () => {
+//     const userData = {
+//       name: icon_username,
+//       skills,
+//       education,
+//       rate,
+//       type,
+//       workExperience,
+//       projectAccess,
+//       personalGoals: goals,
+//     };
+
+//     fetch('/api/user/save', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify(userData),
+//     })
+//       .then(response => response.json())
+//       .then(data => {
+//         console.log(data.message);
+//         // Optionally show a success message to the user
+//       })
+//       .catch(error => {
+//         console.error('Error saving user data', error);
+//       });
+//   };
+
+//   const menu = (
+//     <Menu>
+//       <Menu.Item key="pdf" icon={<FilePdfOutlined />}>
+//         Generate CV (PDF)
+//       </Menu.Item>
+//       <Menu.Item key="docx" icon={<FileWordOutlined />}>
+//         Generate CV (DOCX)
+//       </Menu.Item>
+//     </Menu>
+//   );
+
+//   const items = [
+//     {
+//       label: 'Update',
+//       icon: 'pi pi-refresh'
+//     },
+//     {
+//       label: 'Delete',
+//       icon: 'pi pi-times'
+//     }
+//   ];
+
+//   const startContent = (
+//     <React.Fragment>
+//       <PrimeButton icon="pi pi-plus" style={{ backgroundColor: '#007bff', borderRadius: '5px 0px 0px 5px', color: 'white', }} className="mr-2" />
+//       <Dropdown overlay={menu} trigger={['click']}>
+//         <PrimeButton icon="pi pi-upload" style={{ backgroundColor: '#007bff', borderRadius: '0 5px 5px 0', color: 'white', }} />
+//       </Dropdown>
+//     </React.Fragment>
+//   );
+
+//   const centerContent = (
+//     <>
+//       <IconField iconPosition="left">
+//         <InputIcon className="pi pi-search" />
+//         <InputText placeholder="Search" />
+//       </IconField>
+//     </>
+//   );
+
+//   const endContent = (
+//     <PrimeButton
+//       label="Save"
+//       model={items}
+//       icon="pi pi-check"
+//       onClick={handleSave}
+//       style={{
+//         color: 'white',
+//         backgroundColor: '#007bff',
+//         border: 'none',
+//         borderRadius: '5px 5px 5px 5px' // Optional: Removes the border
+//       }}
+//     />
+//   );
+
+//   const handle = () => {
+//     navigate('/invoice')
+//   }
+
+//   const logout = () => {
+//     navigate('/login')
+//   }
+
+//   return (
+//     <Layout style={{ minHeight: '100vh' }}>
+//       <Sider width={300} style={{ backgroundColor: '#007bff', color: '#fff' }}>
+//         <div style={{ padding: '1rem', textAlign: 'center' }}>
+//           <Avatar size={100} icon={<UserOutlined />} style={{ marginBottom: '1rem' }} />
+//           <h3>{icon_username}</h3>
+//         </div>
+//         <ul style={{ listStyleType: 'none', padding: 0 }}>
+//           <li style={{ marginBottom: '1rem', width: '100%' }}>
+//             <button
+//               style={{
+//                 background: 'none',
+//                 border: 'none',
+//                 color: '#fff',
+//                 textAlign: 'left',
+//                 width: '100%',
+//                 padding: '0.5rem 1rem',
+//                 cursor: 'pointer',
+//               }}
+//             >
+//               <i className="pi pi-home" style={{ marginRight: '0.5rem' }}></i> Dashboard
+//             </button>
+//           </li>
+//           <li style={{ marginBottom: '1rem', width: '100%' }}>
+//             <button
+//               style={{
+//                 background: 'none',
+//                 border: 'none',
+//                 color: '#fff',
+//                 textAlign: 'left',
+//                 width: '100%',
+//                 padding: '0.5rem 1rem',
+//                 cursor: 'pointer',
+//               }}
+//             >
+//               <i className="pi pi-cog" style={{ marginRight: '0.5rem' }}></i> Settings
+//             </button>
+//           </li>
+//           {userPrivileges === 'MANAGER' && (
+//             <li style={{ marginBottom: '1rem', width: '100%' }}>
+//               <button
+//                 style={{
+//                   background: 'none',
+//                   border: 'none',
+//                   color: '#fff',
+//                   textAlign: 'left',
+//                   width: '100%',
+//                   padding: '0.5rem 1rem',
+//                   cursor: 'pointer',
+//                 }}
+//               >
+//                 <i className="pi pi-user" style={{ marginRight: '0.5rem' }}></i> Employees
+//               </button>
+//             </li>
+//           )}
+//           <li style={{ marginBottom: '1rem', width: '100%' }}>
+//             <button
+//               onClick={handle}
+//               style={{
+//                 background: 'none',
+//                 border: 'none',
+//                 color: '#fff',
+//                 textAlign: 'left',
+//                 width: '100%',
+//                 padding: '0.5rem 1rem',
+//                 cursor: 'pointer',
+//               }}
+//             >
+//               <i className="pi pi-wallet" style={{ marginRight: '0.5rem' }}></i> invoices
+//             </button>
+//           </li>
+//           <li style={{ marginBottom: '1rem', width: '100%' }}>
+//             <button
+//               onClick={logout}
+//               style={{
+//                 background: 'none',
+//                 border: 'none',
+//                 color: '#fff',
+//                 textAlign: 'left',
+//                 width: '100%',
+//                 padding: '0.5rem 1rem',
+//                 cursor: 'pointer',
+//               }}
+//             >
+//               <i className="pi pi-sign-out" style={{ marginRight: '0.5rem' }}></i> Logout
+//             </button>
+//           </li>
+//         </ul>
+//       </Sider>
+//       <Layout>
+//         <Toolbar start={startContent} center={centerContent} end={endContent} />
+//         <Content style={{ padding: '1rem' }}>
+//           <Fab style={{ marginTop: '20px', backgroundColor: '#007bff' }} color="primary" aria-label="add">
+//             <LooksOneIcon />
+//           </Fab>
+//           <Card style={{ marginTop: '20px' }}>
+//             <Row gutter={16}>
+//               <Col span={8}>
+//                 <Form.Item label="Skills">
+//                   <Input value={skills} onChange={e => setSkills(e.target.value)} />
+//                 </Form.Item>
+//               </Col>
+//               <Col span={8}>
+//                 <Form.Item label="Education">
+//                   <Input value={education} onChange={e => setEducation(e.target.value)} />
+//                 </Form.Item>
+//               </Col>
+//               <Col span={8}>
+//                 <Form.Item label="Rate">
+//                   <Input value={rate} onChange={e => setRate(e.target.value)} />
+//                 </Form.Item>
+//               </Col>
+//             </Row>
+//           </Card>
+//           <Fab style={{ marginTop: '20px', backgroundColor: '#007bff' }} color="primary" aria-label="add">
+//             <LooksTwoIcon />
+//           </Fab>
+//           <Card style={{ marginTop: '20px' }}>
+//             <Row gutter={16}>
+//               <Col span={8}>
+//                 <Form.Item label="Type">
+//                   <Select value={type} onChange={value => setType(value)}>
+//                     {types.map(type => (
+//                       <Option key={type} value={type}>
+//                         {type}
+//                       </Option>
+//                     ))}
+//                   </Select>
+//                 </Form.Item>
+//               </Col>
+//               <Col span={8}>
+//                 <Form.Item label="Work Experience">
+//                   <Input value={workExperience} onChange={e => setWorkExperience(e.target.value)} />
+//                 </Form.Item>
+//               </Col>
+//               <Col span={8}>
+//                 <Form.Item label="Project Access">
+//                   <Input value={projectAccess} onChange={e => setProjectAccess(e.target.value)} />
+//                 </Form.Item>
+//               </Col>
+//             </Row>
+//           </Card>
+//           <Fab style={{ marginTop: '20px', backgroundColor: '#007bff' }} color="primary" aria-label="add">
+//             <Looks3Icon />
+//           </Fab>
+//           <Card style={{ marginTop: '20px' }}>
+//             <Row gutter={16}>
+//               <Col span={8}>
+//                 <Form.Item label="Goals">
+//                   <Input value={goals} onChange={e => setGoals(e.target.value)} />
+//                 </Form.Item>
+//               </Col>
+//             </Row>
+//           </Card>
+//         </Content>
+//       </Layout>
+//     </Layout>
+//   );
+// };
+
+// export default EmployeeForm;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React, { useState, useEffect } from 'react';
+// import 'antd/dist/reset.css'; // Import Ant Design CSS
+// import { Input, Select, Card, Avatar, Layout, Form, Row, Col, Tooltip, Button as AntButton, Dropdown, Menu } from 'antd';
+// import {  UserOutlined, FilePdfOutlined, FileWordOutlined } from '@ant-design/icons';
+// import LooksOneIcon from '@mui/icons-material/LooksOne';
+// import { Button as PrimeButton } from 'primereact/button';
+// import Fab from '@mui/material/Fab';
+// import Looks3Icon from '@mui/icons-material/Looks3';
+// import LooksTwoIcon from '@mui/icons-material/LooksTwo';
+// import { IconField } from 'primereact/iconfield';
+// import { InputIcon } from 'primereact/inputicon';
+// import { InputText } from 'primereact/inputtext';
+// import { Toolbar } from 'primereact/toolbar';
+// import { useNavigate, NavLink } from 'react-router-dom';
+
+// const { Header, Sider, Content } = Layout;
+// const { Option } = Select;
+
+// const EmployeeForm = ({ icon_username }) => {
+//   const navigate = useNavigate();
+//   const [userPrivileges, setUserPrivileges] = useState(null);
+
+ 
+//   const [userData, setUserData] = useState({});
+//   const [form, setForm] = useState({
+//     type: '',
+//     skills: '',
+//     education: '',
+//     workExperience: '',
+//     rate: '',
+//     projectAccess: '',
+//     goals: ''
+//   });
+
+//   const types = ['Employee', 'Contractor'];
+
+//   useEffect(() => {
+//     if (icon_username) {
+//       fetch(`/api/user/${icon_username}`)
+//         .then(response => {
+//           if (!response.ok) {
+//             throw new Error('Network response was not ok.');
+//           }
+//           return response.json();
+//         })
+//         .then(data => {
+//           setUserPrivileges(data.privileges);
+//           console.log(data.privileges);
+//           setUserData(data);
+//           setForm({
+//             type: data.type || '',
+//             skills: data.skills || '',
+//             education: data.education || '',
+//             workExperience: data.workExperience || '',
+//             rate: data.rate || '',
+//             projectAccess: data.projectAccess || '',
+//             goals: data.personalGoals || ''
+//           });
+//         })
+//         .catch(error => {
+//           console.error('Error fetching user data:', error);
+//         });
+//     }
+//   }, [icon_username]);
+
+
+//   const handleSave = () => {
+//     fetch('/api/user/save', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({ ...form, name: icon_username }),
+//     })
+//       .then(response => response.json())
+//       .then(data => {
+//         console.log(data.message);
+//         // Optionally show a success message to the user
+//       })
+//       .catch(error => {
+//         console.error('Error saving user data', error);
+//       });
+//   };
+
+
+//   const menu = (
+//     <Menu>
+//       <Menu.Item key="pdf" icon={<FilePdfOutlined />}>
+//         Generate CV (PDF)
+//       </Menu.Item>
+//       <Menu.Item key="docx" icon={<FileWordOutlined />}>
+//         Generate CV (DOCX)
+//       </Menu.Item>
+//     </Menu>
+//   );
+
+//   const items = [
+//     {
+//       label: 'Update',
+//       icon: 'pi pi-refresh'
+//     },
+//     {
+//       label: 'Delete',
+//       icon: 'pi pi-times'
+//     }
+//   ];
+
+//   const startContent = (
+//     <React.Fragment>
+//       <PrimeButton icon="pi pi-plus" style={{ backgroundColor: '#007bff', borderRadius: '5px 0px 0px 5px', color: 'white', }} className="mr-2" />
+//       <Dropdown overlay={menu} trigger={['click']}>
+//         <PrimeButton icon="pi pi-upload" style={{ backgroundColor: '#007bff', borderRadius: '0 5px 5px 0', color: 'white', }} />
+//       </Dropdown>
+//     </React.Fragment>
+//   );
+
+//   const centerContent = (
+//     <>
+//       <IconField iconPosition="left">
+//         <InputIcon className="pi pi-search" />
+//         <InputText placeholder="Search" />
+//       </IconField>
+//     </>
+//   );
+
+//   const endContent = (
+//     <PrimeButton
+//       label="Save"
+//       model={items}
+//       onClick = {handleSave}
+//       icon="pi pi-check"
+//       style={{
+//         color: 'white',
+//         backgroundColor: '#007bff',
+//         border: 'none',
+//         borderRadius: '5px 5px 5px 5px' // Optional: Removes the border
+//         // Optional: Sets the text color
+//       }}
+//     />
+//   );
+
+//    function handle () {
+//    navigate('/invoice')
+
+//   }
+
+//   function logout () {
+//     navigate('/login')
+//   }
+
+//   return (
+//     <Layout style={{ minHeight: '100vh' }}>
+//       <Sider width={300} style={{ backgroundColor: '#007bff', color: '#fff' }}>
+//         <div style={{ padding: '1rem', textAlign: 'center' }}>
+//           <Avatar size={100} icon={<UserOutlined />} style={{ marginBottom: '1rem' }} />
+//           <h3>{icon_username}</h3>
+//         </div>
+//         <ul style={{ listStyleType: 'none', padding: 0 }}>
+//           <li style={{ marginBottom: '1rem', width: '100%' }}>
+//             <button
+//               style={{
+
+//                 background: 'none',
+//                 border: 'none',
+//                 color: '#fff',
+//                 textAlign: 'left',
+//                 width: '100%',
+//                 padding: '0.5rem 1rem',
+//                 cursor: 'pointer',
+//               }}
+//             >
+//               <i className="pi pi-home" style={{ marginRight: '0.5rem' }}></i> Dashboard
+//             </button>
+//           </li>
+//           <li style={{ marginBottom: '1rem', width: '100%' }}>
+//             <button
+//               style={{
+//                 background: 'none',
+//                 border: 'none',
+//                 color: '#fff',
+//                 textAlign: 'left',
+//                 width: '100%',
+//                 padding: '0.5rem 1rem',
+//                 cursor: 'pointer',
+//               }}
+//             >
+//               <i className="pi pi-cog" style={{ marginRight: '0.5rem' }}></i> Settings
+//             </button>
+//           </li>
+//           {userPrivileges === 'MANAGER' && (
+//             <li style={{ marginBottom: '1rem', width: '100%' }}>
+//               <button
+//                 style={{
+//                   background: 'none',
+//                   border: 'none',
+//                   color: '#fff',
+//                   textAlign: 'left',
+//                   width: '100%',
+//                   padding: '0.5rem 1rem',
+//                   cursor: 'pointer',
+//                 }}
+//               >
+//                 <i className="pi pi-user" style={{ marginRight: '0.5rem' }}></i> Employees
+//               </button>
+//             </li>
+//           )}
+
+// <li style={{ marginBottom: '1rem', width: '100%' }}>
+//             <button
+//             onClick = {handle}
+//               style={{
+//                 background: 'none',
+//                 border: 'none',
+//                 color: '#fff',
+//                 textAlign: 'left',
+//                 width: '100%',
+//                 padding: '0.5rem 1rem',
+//                 cursor: 'pointer',
+//               }}
+//             >
+//               <i className="pi pi-wallet" style={{ marginRight: '0.5rem' }}></i> invoices
+//             </button>
+//           </li>
+
+//           <li style={{ marginBottom: '1rem', width: '100%' }}>
+//             <button
+//             onClick = {logout}
+//               style={{
+//                 background: 'none',
+//                 border: 'none',
+//                 color: '#fff',
+//                 textAlign: 'left',
+//                 width: '100%',
+//                 padding: '0.5rem 1rem',
+//                 cursor: 'pointer',
+//               }}
+//             >
+//               <i className="pi pi-sign-out" style={{ marginRight: '0.5rem' }}></i> Logout
+//             </button>
+//           </li>
+//         </ul>
+//       </Sider>
+//       <Layout>
+//         <Toolbar start={startContent} center={centerContent} end={endContent} />
+//         <Content style={{ padding: '1rem' }}>
+//           <Fab style={{ marginTop: '20px', backgroundColor: '#007bff' }} color="primary" aria-label="add">
+//             <LooksOneIcon />
+//           </Fab>
+//           <Card title="Personal Information" style={{ marginBottom: '2rem' }}>
+//             <Form layout="vertical">
+//               <Row gutter={16}>
+//                 <Col span={12}>
+//                   <Form.Item label="Skills">
+//                     <Input value={form.skills} onChange={e => setForm({ ...form, skills: e.target.value })} rows = {4} />
+//                   </Form.Item>
+//                 </Col>
+//                 <Col span={12}>
+//                   <Form.Item label="Education">
+//                     <Input value={form.education} onChange={e => setForm({ ...form, education: e.target.value })} rows = {4} />
+//                   </Form.Item>
+//                 </Col>
+//               </Row>
+//               <Row gutter={16}>
+//                 <Col span={12}>
+//                   <Form.Item label="Rate">
+//                     <Input value={form.rate} onChange={e => setForm({ ...form, rate: e.target.value })} rows = {4} />
+//                   </Form.Item>
+//                 </Col>
+//                 <Col span={12}>
+//                   <Form.Item label="Type">
+//                   <Select value={form.type} onChange={value => setForm({ ...form, type: value })}>
+//                       <Option value="Employee">Employee</Option>
+//                       <Option value="Contractor">Contractor</Option>
+//                     </Select>
+//                   </Form.Item>
+//                 </Col>
+//               </Row>
+//             </Form>
+//           </Card>
+//           <Fab style={{ backgroundColor: '#007bff' }} color="primary" aria-label="add">
+//             <LooksTwoIcon />
+//           </Fab>
+//           <Card title="Professional Details" style={{ marginBottom: '2rem' }}>
+//             <Form layout="vertical">
+//               <Form.Item label = 'Work Experience'>
+//                 <Input.TextArea value={form.workExperience} onChange={e => setForm({ ...form, workExperience: e.target.value })} rows={4} />
+//               </Form.Item>
+//               <Form.Item label = 'Project Access'>
+//                 <Input value={form.projectAccess} onChange={e => setForm({ ...form, projectAccess: e.target.value })} rows={4} />
+//               </Form.Item>
+//             </Form>
+//           </Card>
+//           <Fab style={{ backgroundColor: '#007bff' }} color="primary" aria-label="add">
+//             <Looks3Icon />
+//           </Fab>
+//           <Card title="Goals" style={{ marginBottom: '2rem' }}>
+//             <Form layout="vertical">
+//               <Form.Item label = {'Personal Goals'}>
+//                 <Input.TextArea value={form.goals} onChange={e => setForm({ ...form, goals: e.target.value })} rows={4} />
+//               </Form.Item>
+//             </Form>
+//           </Card>
+//         </Content>
+//       </Layout>
+//     </Layout>
+//   );
+// };
+
+// export default EmployeeForm;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 import React, { useState, useEffect } from 'react';
 import 'antd/dist/reset.css'; // Import Ant Design CSS
 import { Input, Select, Card, Avatar, Layout, Form, Row, Col, Tooltip, Button as AntButton, Dropdown, Menu } from 'antd';
-import { PlusOutlined, SaveOutlined, SearchOutlined, UserOutlined, FilePdfOutlined, FileWordOutlined } from '@ant-design/icons';
+import { UserOutlined, FilePdfOutlined, FileWordOutlined } from '@ant-design/icons';
 import LooksOneIcon from '@mui/icons-material/LooksOne';
 import { Button as PrimeButton } from 'primereact/button';
 import Fab from '@mui/material/Fab';
 import Looks3Icon from '@mui/icons-material/Looks3';
+// import LooksThreeIcon from '@mui/icons-material/LooksThree';
 import LooksTwoIcon from '@mui/icons-material/LooksTwo';
 import { IconField } from 'primereact/iconfield';
 import { InputIcon } from 'primereact/inputicon';
 import { InputText } from 'primereact/inputtext';
 import { Toolbar } from 'primereact/toolbar';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { jsPDF } from "jspdf";
 import { Document, Packer, Paragraph, TextRun, AlignmentType } from "docx";
 import { saveAs } from "file-saver";
-import { useNavigate, NavLink } from 'react-router-dom';
-
 const { Header, Sider, Content } = Layout;
 const { Option } = Select;
 
-const EmployeeForm = ({ icon_username }) => {
-  const navigate = useNavigate();
+const EmployeeForm = ({ icon_username } ) => {
   const [userPrivileges, setUserPrivileges] = useState(null);
-  const [type, setType] = useState(null);
-  const [skills, setSkills] = useState('');
-  const [education, setEducation] = useState('');
-  const [workExperience, setWorkExperience] = useState('');
-  const [rate, setRate] = useState('');
-  const [projectAccess, setProjectAccess] = useState('');
-  const [goals, setGoals] = useState('');
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [userData, setUserData] = useState({});
+  const [form, setForm] = useState({
+    name: '',
+    type: '',
+    skills: '',
+    education: '',
+    workExperience: '',
+    rate: '',
+    projectAccess: '',
+    goals: ''
+  });
+
+
+
+
+
+  
 
   const types = ['Employee', 'Contractor'];
+
+  useEffect(() => {
+    if (location.state && location.state.user) {
+      const user = location.state.user;
+      console.log("User data received:", user);
+      setUserData(user);
+      setForm({
+        name: user.name || '',
+        type: user.type || '',
+        skills: user.skills || '',
+        education: user.education || '',
+        workExperience: user.workExperience || '',
+        rate: user.rate || '',
+        projectAccess: user.projectAccess || '',
+        goals: user.goals || ''
+        
+      });
+      
+    }
+  }, [location.state]);
+
+ 
+
+
+
 
   useEffect(() => {
     if (icon_username) {
@@ -1684,6 +2375,46 @@ const EmployeeForm = ({ icon_username }) => {
   }, [icon_username]);
 
 
+
+  // const handleSave = () => {
+  //   fetch('/api/user/save', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({ ...form, name: userData.username }), // Adjust field name as necessary
+  //   })
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       console.log(data.message);
+  //       // Optionally show a success message to the user
+  //     })
+  //     .catch(error => {
+  //       console.error('Error saving user data', error);
+  //     });
+  // };
+
+
+  const handleSave = () => {
+    fetch('/api/user/save', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ...form, id: userData.id }), // Include the user's id
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data.message);
+        // Optionally show a success message to the user
+      })
+      .catch(error => {
+        console.error('Error saving user data', error);
+      });
+  };
+  
+
+
   const handleMenuClick = (e) => {
     if (e.key === 'pdf') {
       generatePDF();
@@ -1692,18 +2423,6 @@ const EmployeeForm = ({ icon_username }) => {
     }
   };
 
-  // const generatePDF = () => {
-  //   const doc = new jsPDF();
-  //   doc.text('Employee Information', 10, 10);
-  //   doc.text(`Skills: ${skills}`, 10, 20);
-  //   doc.text(`Education: ${education}`, 10, 30);
-  //   doc.text(`Rate: ${rate}`, 10, 40);
-  //   doc.text(`Type: ${type}`, 10, 50);
-  //   doc.text(`Work Experience: ${workExperience}`, 10, 60);
-  //   doc.text(`Project Access: ${projectAccess}`, 10, 70);
-  //   doc.text(`Goals: ${goals}`, 10, 80);
-  //   doc.save('employee_information.pdf');
-  // };
 
 
   const generatePDF = () => {
@@ -1711,7 +2430,7 @@ const EmployeeForm = ({ icon_username }) => {
   
     // Get the page width to center the title
     const pageWidth = doc.internal.pageSize.getWidth();
-    const title = `Employee Information ${icon_username}`;
+    const title = `Employee Information ${form.name}`;
   
     // Calculate the text width to center it
     const textWidth = doc.getTextWidth(title);
@@ -1734,88 +2453,32 @@ const EmployeeForm = ({ icon_username }) => {
     };
   
     let y = 30;
-    addSection('Skills', skills, y);
+    addSection('Skills', form.skills, y);
     y += 20; // Adjust y position for the next section
   
-    addSection('Education', education, y);
+    addSection('Education', form.education, y);
     y += 20;
   
-    addSection('Rate', rate, y);
+    addSection('Rate', form.rate, y);
     y += 20;
   
-    addSection('Type', type, y);
+    addSection('Type', form.type, y);
     y += 20;
   
-    addSection('Work Experience', workExperience, y);
+    addSection('Work Experience', form.workExperience, y);
     y += 20;
   
-    addSection('Project Access', projectAccess, y);
+    addSection('Project Access', form.projectAccess, y);
     y += 20;
   
-    addSection('Goals', goals, y);
+    addSection('Goals', form.goals, y);
   
     doc.save('employee_information.pdf');
   };
   
-  
 
 
 
-  // const generateDOCX = () => {
-  //   const doc = new Document({
-  //     sections: [
-  //       {
-  //         properties: {},
-  //         children: [
-  //           new Paragraph({
-  //             children: [
-  //               new TextRun("Employee Information"),
-  //             ],
-  //           }),
-  //           new Paragraph({
-  //             children: [
-  //               new TextRun(`Skills: ${skills}`),
-  //             ],
-  //           }),
-  //           new Paragraph({
-  //             children: [
-  //               new TextRun(`Education: ${education}`),
-  //             ],
-  //           }),
-  //           new Paragraph({
-  //             children: [
-  //               new TextRun(`Rate: ${rate}`),
-  //             ],
-  //           }),
-  //           new Paragraph({
-  //             children: [
-  //               new TextRun(`Type: ${type}`),
-  //             ],
-  //           }),
-  //           new Paragraph({
-  //             children: [
-  //               new TextRun(`Work Experience: ${workExperience}`),
-  //             ],
-  //           }),
-  //           new Paragraph({
-  //             children: [
-  //               new TextRun(`Project Access: ${projectAccess}`),
-  //             ],
-  //           }),
-  //           new Paragraph({
-  //             children: [
-  //               new TextRun(`Goals: ${goals}`),
-  //             ],
-  //           }),
-  //         ],
-  //       },
-  //     ],
-  //   });
-
-  //   Packer.toBlob(doc).then((blob) => {
-  //     saveAs(blob, "employee_information.docx");
-  //   });
-  // };
 
 
   const generateDOCX = () => {
@@ -1828,20 +2491,20 @@ const EmployeeForm = ({ icon_username }) => {
               alignment: AlignmentType.CENTER,
               children: [
                 new TextRun({
-                  text: `Employee Information ${icon_username}`,
+                  text: `Employee Information ${form.name}`,
                   bold: true,
                   size: 32,
                 }),
               ],
             }),
             ...[
-              { header: 'Skills', content: skills },
-              { header: 'Education', content: education },
-              { header: 'Rate', content: rate },
-              { header: 'Type', content: type },
-              { header: 'Work Experience', content: workExperience },
-              { header: 'Project Access', content: projectAccess },
-              { header: 'Goals', content: goals },
+              { header: 'Skills', content: form.skills },
+              { header: 'Education', content: form.education },
+              { header: 'Rate', content: form.rate },
+              { header: 'Type', content: form.type },
+              { header: 'Work Experience', content: form.workExperience },
+              { header: 'Project Access', content: form.projectAccess },
+              { header: 'Goals', content: form.goals },
             ].map((section) => [
               new Paragraph({
                 spacing: {
@@ -1873,7 +2536,9 @@ const EmployeeForm = ({ icon_username }) => {
       saveAs(blob, "employee_information.docx");
     });
   };
-  
+
+
+
 
   const menu = (
     <Menu onClick={handleMenuClick}>
@@ -1912,7 +2577,6 @@ const EmployeeForm = ({ icon_username }) => {
         <InputIcon className="pi pi-search" />
         <InputText placeholder="Search" />
       </IconField>
-      {/* <img src="https://ven07222.service-now.com/x_llll2_insearch_f.inCloudLogicLogo.png" width="52" height="52" alt="Logo" /> */}
     </>
   );
 
@@ -1920,24 +2584,28 @@ const EmployeeForm = ({ icon_username }) => {
     <PrimeButton
       label="Save"
       model={items}
+      onClick={handleSave}
       icon="pi pi-check"
       style={{
         color: 'white',
         backgroundColor: '#007bff',
         border: 'none',
-        borderRadius: '5px 5px 5px 5px' // Optional: Removes the border
-        // Optional: Sets the text color
+        borderRadius: '5px 5px 5px 5px'
       }}
     />
   );
 
-   function handle () {
-   navigate('/invoice')
-
+  function handle() {
+    navigate('/invoice');
   }
 
-  function logout () {
-    navigate('/login')
+  function logout() {
+    navigate('/login');
+  }
+
+
+  function emp () {
+    navigate('/employees');
   }
 
   return (
@@ -1945,9 +2613,11 @@ const EmployeeForm = ({ icon_username }) => {
       <Sider width={300} style={{ backgroundColor: '#007bff', color: '#fff' }}>
         <div style={{ padding: '1rem', textAlign: 'center' }}>
           <Avatar size={100} icon={<UserOutlined />} style={{ marginBottom: '1rem' }} />
-          <h3>{icon_username}</h3>
+          <h3>{form.name}</h3>
         </div>
         <ul style={{ listStyleType: 'none', padding: 0 }}>
+          {/* Sidebar items */}
+
           <li style={{ marginBottom: '1rem', width: '100%' }}>
             <button
               style={{
@@ -1964,6 +2634,7 @@ const EmployeeForm = ({ icon_username }) => {
               <i className="pi pi-home" style={{ marginRight: '0.5rem' }}></i> Dashboard
             </button>
           </li>
+          
           <li style={{ marginBottom: '1rem', width: '100%' }}>
             <button
               style={{
@@ -1979,9 +2650,12 @@ const EmployeeForm = ({ icon_username }) => {
               <i className="pi pi-cog" style={{ marginRight: '0.5rem' }}></i> Settings
             </button>
           </li>
+
+
           {userPrivileges === 'MANAGER' && (
             <li style={{ marginBottom: '1rem', width: '100%' }}>
               <button
+              onClick = {emp}
                 style={{
                   background: 'none',
                   border: 'none',
@@ -1997,9 +2671,9 @@ const EmployeeForm = ({ icon_username }) => {
             </li>
           )}
 
-<li style={{ marginBottom: '1rem', width: '100%' }}>
+          <li style={{ marginBottom: '1rem', width: '100%' }}>
             <button
-            onClick = {handle}
+              onClick={handle}
               style={{
                 background: 'none',
                 border: 'none',
@@ -2013,10 +2687,9 @@ const EmployeeForm = ({ icon_username }) => {
               <i className="pi pi-wallet" style={{ marginRight: '0.5rem' }}></i> invoices
             </button>
           </li>
-
           <li style={{ marginBottom: '1rem', width: '100%' }}>
             <button
-            onClick = {logout}
+              onClick={logout}
               style={{
                 background: 'none',
                 border: 'none',
@@ -2033,17 +2706,6 @@ const EmployeeForm = ({ icon_username }) => {
         </ul>
       </Sider>
       <Layout>
-        {/* <Header style={{ background: '#fff', padding: '0 1rem' }}>
-          <Row justify="space-between">
-            <Col>
-              <Button icon={<PlusOutlined />} type="primary" style={{ marginRight: '0.5rem' }}>New</Button>
-              <Button icon={<SaveOutlined />} type="primary">Save</Button>
-            </Col>
-            <Col>
-              <Input prefix={<SearchOutlined />} placeholder="Search" style={{ width: 200 }} />
-            </Col>
-          </Row>
-        </Header> */}
         <Toolbar start={startContent} center={centerContent} end={endContent} />
         <Content style={{ padding: '1rem' }}>
           <Fab style={{ marginTop: '20px', backgroundColor: '#007bff' }} color="primary" aria-label="add">
@@ -2054,27 +2716,26 @@ const EmployeeForm = ({ icon_username }) => {
               <Row gutter={16}>
                 <Col span={12}>
                   <Form.Item label="Skills">
-                    <Input value={skills} onChange={(e) => setSkills(e.target.value)} rows = {4} />
+                    <Input value={form.skills} onChange={e => setForm({ ...form, skills: e.target.value })} rows={4} />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
                   <Form.Item label="Education">
-                    <Input value={education} onChange={(e) => setEducation(e.target.value)} rows = {4} />
+                    <Input value={form.education} onChange={e => setForm({ ...form, education: e.target.value })} rows={4} />
                   </Form.Item>
                 </Col>
               </Row>
               <Row gutter={16}>
                 <Col span={12}>
                   <Form.Item label="Rate">
-                    <Input value={rate} onChange={(e) => setRate(e.target.value)} rows = {4} />
+                    <Input value={form.rate} onChange={e => setForm({ ...form, rate: e.target.value })} rows={4} />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
                   <Form.Item label="Type">
-                    <Select value={type} onChange={setType} placeholder="Select Type">
-                      {types.map(t => (
-                        <Option key={t} value={t}>{t}</Option>
-                      ))}
+                    <Select value={form.type} onChange={value => setForm({ ...form, type: value })}>
+                      <Option value="Employee">Employee</Option>
+                      <Option value="Contractor">Contractor</Option>
                     </Select>
                   </Form.Item>
                 </Col>
@@ -2086,27 +2747,21 @@ const EmployeeForm = ({ icon_username }) => {
           </Fab>
           <Card title="Professional Details" style={{ marginBottom: '2rem' }}>
             <Form layout="vertical">
-              <Form.Item label = 'Work Experience'>
-                <Input.TextArea value={workExperience} onChange={(e) => setWorkExperience(e.target.value)} rows={4} />
+              <Form.Item label="Work Experience">
+                <Input.TextArea value={form.workExperience} onChange={e => setForm({ ...form, workExperience: e.target.value })} rows={4} />
               </Form.Item>
-              <Form.Item label = 'Project Access'>
-                <Input value={projectAccess} onChange={(e) => setProjectAccess(e.target.value)} rows={4} />
+              <Form.Item label="Project Access">
+                <Input value={form.projectAccess} onChange={e => setForm({ ...form, projectAccess: e.target.value })} rows={4} />
               </Form.Item>
             </Form>
           </Card>
-          
-          
-              {/* <Form.Item>
-                <Input value={projectAccess} onChange={(e) => setProjectAccess(e.target.value)} rows={4} />
-              </Form.Item> */}
-            
           <Fab style={{ backgroundColor: '#007bff' }} color="primary" aria-label="add">
-            <Looks3Icon />
+            <Looks3Icon/>
           </Fab>
           <Card title="Goals" style={{ marginBottom: '2rem' }}>
             <Form layout="vertical">
-              <Form.Item label = {'Personal Goals'}>
-                <Input.TextArea value={goals} onChange={(e) => setGoals(e.target.value)} rows={4} />
+              <Form.Item label={'Personal Goals'}>
+                <Input.TextArea value={form.goals} onChange={e => setForm({ ...form, goals: e.target.value })} rows={4} />
               </Form.Item>
             </Form>
           </Card>
@@ -2117,3 +2772,18 @@ const EmployeeForm = ({ icon_username }) => {
 };
 
 export default EmployeeForm;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

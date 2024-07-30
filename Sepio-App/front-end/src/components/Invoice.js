@@ -468,6 +468,10 @@ const Invoice = () => {
     navigate('/login')
   }
 
+  function emp () {
+    navigate('/employees');
+  }
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider width={300} style={{ backgroundColor: '#007bff', color: '#fff' }}>
@@ -508,6 +512,7 @@ const Invoice = () => {
           </li>
           <li style={{ marginBottom: '1rem', width: '100%' }}>
             <button
+            onClick = {emp}
               style={{
                 background: 'none',
                 border: 'none',
@@ -518,7 +523,7 @@ const Invoice = () => {
                 cursor: 'pointer',
               }}
             >
-              <i className="pi pi-user" style={{ marginRight: '0.5rem' }}></i> Employees
+              <i className="pi pi-user"  style={{ marginRight: '0.5rem' }}></i> Employees
             </button>
           </li>
 

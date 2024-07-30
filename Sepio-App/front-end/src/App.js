@@ -6,6 +6,7 @@ import RootView from './components/RootView';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
 import Invoice from './components/Invoice';
+import Employees from './components/Employees';
 import 'primereact/resources/themes/saga-blue/theme.css';  // Theme
 import 'primereact/resources/primereact.min.css';           // Core CSS
 import 'primeicons/primeicons.css';
@@ -26,8 +27,9 @@ function App() {
              <Route path = '/' element = {<SignUp/>}/>
             <Route path = '/login' element = {<Login setUsername={setUsername}/>}/>
             <Route path='/hrsystem' element={<RootView icon_username = {icon_username} />} />
-            <Route path = 'invoice' element = {<Invoice/>}/>
-
+            <Route path = '/invoice' element = {<Invoice/>}/>
+            <Route path = '/employees' element = {<Employees icon_username = {icon_username} />}/>
+ 
 
           </Routes>
         </div>

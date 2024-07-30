@@ -182,7 +182,7 @@ export default function LoginPage ({setUsername}) {
         showSuccess('Success')
        setUsername(values.name)
        console.log('i get the success');
-        navigate('/hrsystem');
+        navigate('/employees');
       } else {
         showError('Authentication failed')
         console.log('bad uthenticate')

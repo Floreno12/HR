@@ -12,13 +12,24 @@ enum Privileges {
   EMPLOYEE
 }
 
-model user {
-  id        Int    @id @default(autoincrement())
-  name      String @unique
-  password  String
-  education String
-  privileges Privileges
-  email      String
+enum UserType {
+  Employee
+  Contractor
+}
+
+model User {
+  id             Int       @id @default(autoincrement())
+  name           String    @unique
+  password       String
+  education      String
+  privileges     Privileges
+  email          String
+  skills         String?   // Optional field
+  rate           String?   // Optional field
+  type           UserType  // Enum for Type field
+  workExperience String?   // Optional field
+  projectAccess  String?   // Optional field
+  personalGoals  String?   // Optional field
 }
 
 
