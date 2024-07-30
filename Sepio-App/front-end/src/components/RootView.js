@@ -2285,11 +2285,10 @@
 
 
 
-
 import React, { useState, useEffect } from 'react';
 import 'antd/dist/reset.css'; // Import Ant Design CSS
-import { Input, Select, Card, Avatar, Layout, Form, Row, Col, Tooltip, Button as AntButton, Dropdown, Menu } from 'antd';
-import { UserOutlined, FilePdfOutlined, FileWordOutlined } from '@ant-design/icons';
+import { Input, Select, Card, Avatar, Layout, Form, Row, Col, Tooltip, Button as AntButton, Dropdown, Menu, Upload, message } from 'antd';
+import { UserOutlined, FilePdfOutlined, FileWordOutlined, UploadOutlined, DeleteOutlined } from '@ant-design/icons';
 import LooksOneIcon from '@mui/icons-material/LooksOne';
 import { Button as PrimeButton } from 'primereact/button';
 import Fab from '@mui/material/Fab';
@@ -2308,6 +2307,7 @@ const { Header, Sider, Content } = Layout;
 const { Option } = Select;
 
 const EmployeeForm = ({ icon_username } ) => {
+  const [avatarUrl, setAvatarUrl] = useState(null);
   const [userPrivileges, setUserPrivileges] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -2320,7 +2320,8 @@ const EmployeeForm = ({ icon_username } ) => {
     workExperience: '',
     rate: '',
     projectAccess: '',
-    goals: ''
+    goals: '',
+   
   });
 
 
@@ -2344,10 +2345,10 @@ const EmployeeForm = ({ icon_username } ) => {
         workExperience: user.workExperience || '',
         rate: user.rate || '',
         projectAccess: user.projectAccess || '',
-        goals: user.goals || ''
-        
+        goals: user.goals || '',
+        avatarUrl: user.avatarUrl || ''
       });
-      
+      setAvatarUrl(user.avatarUrl || '');
     }
   }, [location.state]);
 
@@ -2363,16 +2364,58 @@ const EmployeeForm = ({ icon_username } ) => {
         .then(data => {
           setUserPrivileges(data.privileges);
           console.log(data.privileges);
-          setTimeout(() => {
-
-          }, 100);
         })
         .catch(error => {
           console.log('Error fetching user privileges', error);
-
         });
     }
   }, [icon_username]);
+
+
+  //new
+
+  const handleUploadChange = info => {
+    if (info.file.status !== 'uploading') {
+      const formData = new FormData();
+      formData.append('avatar', info.file.originFileObj);
+      formData.append('id', userData.id);
+
+      fetch('/api/user/upload-avatar', {
+        method: 'POST',
+        body: formData,
+      })
+        .then(response => response.json())
+        .then(data => {
+          setAvatarUrl(data.avatarUrl);
+          message.success(`${info.file.name} file uploaded successfully`);
+        })
+        .catch(error => {
+          console.error('Error uploading avatar', error);
+          message.error(`${info.file.name} file upload failed.`);
+        });
+    }
+  };
+
+  const handleDeleteAvatar = () => {
+    setAvatarUrl(null);
+    message.success('Avatar deleted successfully');
+  };
+
+  const menu = (
+    <Menu>
+      <Menu.Item key="1" icon={<UploadOutlined />}>
+        <Upload
+          showUploadList={false}
+          onChange={handleUploadChange}
+        >
+          <span>Change Photo</span>
+        </Upload>
+      </Menu.Item>
+      <Menu.Item key="2" icon={<DeleteOutlined />} onClick={handleDeleteAvatar}>
+        Delete Photo
+      </Menu.Item>
+    </Menu>
+  );
 
 
 
@@ -2540,7 +2583,7 @@ const EmployeeForm = ({ icon_username } ) => {
 
 
 
-  const menu = (
+  const menus = (
     <Menu onClick={handleMenuClick}>
       <Menu.Item key="pdf" icon={<FilePdfOutlined />}>
         Generate CV (PDF)
@@ -2565,7 +2608,7 @@ const EmployeeForm = ({ icon_username } ) => {
   const startContent = (
     <React.Fragment>
       <PrimeButton icon="pi pi-plus" style={{ backgroundColor: '#007bff', borderRadius: '5px 0px 0px 5px', color: 'white', }} className="mr-2" />
-      <Dropdown overlay={menu} trigger={['click']}>
+      <Dropdown overlay={menus} trigger={['click']}>
         <PrimeButton icon="pi pi-upload" style={{ backgroundColor: '#007bff', borderRadius: '0 5px 5px 0', color: 'white', }} />
       </Dropdown>
     </React.Fragment>
@@ -2612,7 +2655,14 @@ const EmployeeForm = ({ icon_username } ) => {
     <Layout style={{ minHeight: '100vh' }}>
       <Sider width={300} style={{ backgroundColor: '#007bff', color: '#fff' }}>
         <div style={{ padding: '1rem', textAlign: 'center' }}>
-          <Avatar size={100} icon={<UserOutlined />} style={{ marginBottom: '1rem' }} />
+        <Dropdown overlay={menu} trigger={['click']}>
+            <Avatar
+              size={100}
+              icon={!avatarUrl && <UserOutlined />}
+              src={avatarUrl}
+              style={{ marginBottom: '1rem', cursor: 'pointer' }}
+            />
+          </Dropdown>
           <h3>{form.name}</h3>
         </div>
         <ul style={{ listStyleType: 'none', padding: 0 }}>
@@ -2772,18 +2822,3 @@ const EmployeeForm = ({ icon_username } ) => {
 };
 
 export default EmployeeForm;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

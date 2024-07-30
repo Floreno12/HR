@@ -30,6 +30,7 @@ model User {
   workExperience String?   // Optional field
   projectAccess  String?   // Optional field
   personalGoals  String?   // Optional field
+  avatarUrl      String?   // Optional field for avatar URL
 }
 
 
