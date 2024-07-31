@@ -11,12 +11,13 @@ const app = express();
 const puppeteer = require('puppeteer');
 const prisma = new PrismaClient();
 const PORT = process.env.PORT || 3000;
+const fs = require('fs');
+
 
 
 
 // Middleware to parse JSON bodies
 app.use(bodyParser.json());
-
 
 
 
@@ -36,9 +37,6 @@ const parseTimeEstimate = (estimate) => {
 
   return hours;
 };
-
-
-
 
 
 app.post('/api/generate-invoice', async (req, res) => {
@@ -205,7 +203,8 @@ app.get('/api/user/:username', async (req, res) => {
         rate: true,
         type: true,
         projectAccess: true,
-        personalGoals: true
+        personalGoals: true,
+        avatarUrl: true
       }
     });
 
@@ -227,8 +226,6 @@ app.get('/api/user/:username', async (req, res) => {
 
 
 
-app.use('/uploads', express.static('uploads'));
-
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads/');
@@ -242,7 +239,45 @@ const upload = multer({ storage: storage });
 
 
 
-app.post('/api/user/upload-avatar', upload.single('avatar'), async (req, res) => {
+// Serve static files for uploads
+app.use('/uploads', express.static('uploads'));
+
+// Endpoint to handle avatar upload
+// app.post('/api/user/:username/avatar', upload.single('avatar'), async (req, res) => {
+//   try {
+//     const { username } = req.params;
+//     const avatarUrl = `/uploads/${req.file.filename}`;
+
+//     const user = await prisma.user.update({
+//       where: { name: username },
+//       data: { avatarUrl: avatarUrl }
+//     });
+
+//     res.json({ message: 'Avatar uploaded successfully', avatarUrl });
+//   } catch (error) {
+//     console.error('Error uploading avatar:', error);
+//     res.status(500).json({ error: 'Error uploading avatar' });
+//   }
+// });
+
+app.post('/api/user/:username/avatar', upload.single('avatar'), async (req, res) => {
+  try {
+    const { username } = req.params;
+    const avatarUrl = `/uploads/${req.file.filename}`;
+    const user = await prisma.user.update({
+      where: { name: username },
+      data: { avatarUrl: avatarUrl }
+    });
+    res.json({ message: 'Avatar updated successfully', avatarUrl });
+  } catch (error) {
+    console.error('Error updating avatar:', error);
+    res.status(500).json({ error: 'Error updating avatar' });
+  }
+});
+
+
+
+app.post('/api/user/avatar', upload.single('avatar'), async (req, res) => {
   try {
     const { id } = req.body;
     const avatarUrl = `/uploads/${req.file.filename}`;
@@ -254,6 +289,106 @@ app.post('/api/user/upload-avatar', upload.single('avatar'), async (req, res) =>
   } catch (error) {
     console.error('Error uploading avatar:', error);
     res.status(500).json({ error: 'Error uploading avatar' });
+  }
+});
+
+
+app.post('/api/user/delete-avatar', async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    // Fetch the current user to get the avatar URL
+    const user = await prisma.user.findUnique({
+      where: { id: parseInt(id) },
+    });
+
+    if (user && user.avatarUrl) {
+      const filePath = path.join(__dirname, 'uploads', user.avatarUrl.replace('/uploads/', ''));
+
+      // Delete the avatar file
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error('Error deleting avatar file:', err);
+          return res.status(500).json({ error: 'Error deleting avatar file' });
+        }
+
+        // Update the user record to remove the avatar URL
+        prisma.user.update({
+          where: { id: parseInt(id) },
+          data: { avatarUrl: null },
+        })
+        .then(() => {
+          res.json({ message: 'Avatar deleted successfully' });
+        })
+        .catch(updateError => {
+          console.error('Error updating user record:', updateError);
+          res.status(500).json({ error: 'Error updating user record' });
+        });
+      });
+    } else {
+      res.status(404).json({ error: 'User or avatar not found' });
+    }
+  } catch (error) {
+    console.error('Error deleting avatar:', error);
+    res.status(500).json({ error: 'Error deleting avatar' });
+  }
+});
+
+
+
+////for list
+
+
+
+
+
+
+
+app.post('/api/user/upload-avatar', upload.single('avatar'), async (req, res) => {
+  try {
+    const { id } = req.body;
+    const avatarUrl = `/uploads/${req.file.filename}`;
+    const user = await prisma.user.update({
+      where: { id: parseInt(id) },
+      data: { avatarUrl: avatarUrl}
+    });
+    res.json({ message: 'Avatar uploaded successfully', avatarUrl });
+  } catch (error) {
+    console.error('Error uploading avatar:', error);
+    res.status(500).json({ error: 'Error uploading avatar' });
+  }
+});
+
+
+
+// Endpoint to delete avatar
+app.post('/api/user/:username/delete-avatar', async (req, res) => {
+  const { username } = req.params;
+
+  try {
+    // Find the user
+    const user = await prisma.user.findUnique({
+      where: { name: username }
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Delete the avatar file from the server
+    const avatarPath = path.join(__dirname, 'uploads', user.avatarUrl.replace('/uploads/', ''));
+    fs.unlinkSync(avatarPath);
+
+    // Update the user record to remove the avatar URL
+    await prisma.user.update({
+      where: { name: username },
+      data: { avatarUrl: null }
+    });
+
+    res.json({ message: 'Avatar deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting avatar:', error);
+    res.status(500).json({ message: 'Error deleting avatar' });
   }
 });
 

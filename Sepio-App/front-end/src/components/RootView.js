@@ -3893,10 +3893,6 @@ const EmployeeForm = ({ icon_username } ) => {
 
 
 
-
-
-  
-
   const types = ['Employee', 'Contractor'];
 
   useEffect(() => {
@@ -3947,7 +3943,7 @@ const EmployeeForm = ({ icon_username } ) => {
       formData.append('avatar', info.file.originFileObj);
       formData.append('id', userData.id);
 
-      fetch('/api/user/upload-avatar', {
+      fetch('/api/user/avatar', {
         method: 'POST',
         body: formData,
       })
@@ -3964,9 +3960,25 @@ const EmployeeForm = ({ icon_username } ) => {
   };
 
   const handleDeleteAvatar = () => {
-    setAvatarUrl(null);
-    message.success('Avatar deleted successfully');
+    fetch('/api/user/delete-avatar', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id: userData.id }), // Send the user's ID to delete the avatar
+    })
+      .then(response => response.json())
+      .then(data => {
+        setAvatarUrl(null);
+        setForm(prevForm => ({ ...prevForm, avatarUrl: '' })); // Update the form state
+        message.success('Avatar deleted successfully');
+      })
+      .catch(error => {
+        console.error('Error deleting avatar', error);
+        message.error('Avatar deletion failed.');
+      });
   };
+  
 
   const menu = (
     <Menu>
@@ -3983,26 +3995,7 @@ const EmployeeForm = ({ icon_username } ) => {
       </Menu.Item>
     </Menu>
   );
-
-
-
-  // const handleSave = () => {
-  //   fetch('/api/user/save', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({ ...form, name: userData.username }), // Adjust field name as necessary
-  //   })
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       console.log(data.message);
-  //       // Optionally show a success message to the user
-  //     })
-  //     .catch(error => {
-  //       console.error('Error saving user data', error);
-  //     });
-  // };
+  
 
 
   const handleSave = () => {
@@ -4025,133 +4018,12 @@ const EmployeeForm = ({ icon_username } ) => {
   
 
 
-  const handleMenuClick = (e) => {
-    if (e.key === 'pdf') {
-      generatePDF();
-    } else if (e.key === 'docx') {
-      generateDOCX();
-    }
-  };
-
-
-
-  const generatePDF = () => {
-    const doc = new jsPDF();
-  
-    // Get the page width to center the title
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const title = `Employee Information ${form.name}`;
-  
-    // Calculate the text width to center it
-    const textWidth = doc.getTextWidth(title);
-    const x = (pageWidth - textWidth) / 2;
-  
-    // Add the centered title
-    doc.setFontSize(20);
-    doc.setFont('helvetica', 'bold');
-    doc.text(title, x, 10);
-  
-    // Define a helper function to add a section with a header
-    const addSection = (header, content, y) => {
-      doc.setFontSize(16); // Set font size for the header
-      doc.setFont('helvetica', 'bold'); // Set font style to bold
-      doc.text(header, 10, y); // Add header text
-  
-      doc.setFontSize(12); // Reset font size for the content
-      doc.setFont('helvetica', 'normal'); // Reset font style to normal
-      doc.text(content || '', 10, y + 10); // Add content text
-    };
-  
-    let y = 30;
-    addSection('Skills', form.skills, y);
-    y += 20; // Adjust y position for the next section
-  
-    addSection('Education', form.education, y);
-    y += 20;
-  
-    addSection('Rate', form.rate, y);
-    y += 20;
-  
-    addSection('Type', form.type, y);
-    y += 20;
-  
-    addSection('Work Experience', form.workExperience, y);
-    y += 20;
-  
-    addSection('Project Access', form.projectAccess, y);
-    y += 20;
-  
-    addSection('Goals', form.goals, y);
-  
-    doc.save('employee_information.pdf');
-  };
-  
-
-
-
-
-
-  const generateDOCX = () => {
-    const doc = new Document({
-      sections: [
-        {
-          properties: {},
-          children: [
-            new Paragraph({
-              alignment: AlignmentType.CENTER,
-              children: [
-                new TextRun({
-                  text: `Employee Information ${form.name}`,
-                  bold: true,
-                  size: 32,
-                }),
-              ],
-            }),
-            ...[
-              { header: 'Skills', content: form.skills },
-              { header: 'Education', content: form.education },
-              { header: 'Rate', content: form.rate },
-              { header: 'Type', content: form.type },
-              { header: 'Work Experience', content: form.workExperience },
-              { header: 'Project Access', content: form.projectAccess },
-              { header: 'Goals', content: form.goals },
-            ].map((section) => [
-              new Paragraph({
-                spacing: {
-                  before: 200,
-                },
-                children: [
-                  new TextRun({
-                    text: section.header,
-                    bold: true,
-                    size: 24,
-                  }),
-                ],
-              }),
-              new Paragraph({
-                children: [
-                  new TextRun({
-                    text: section.content,
-                    size: 24,
-                  }),
-                ],
-              }),
-            ]).flat(),
-          ],
-        },
-      ],
-    });
-  
-    Packer.toBlob(doc).then((blob) => {
-      saveAs(blob, "employee_information.docx");
-    });
-  };
 
 
 
 
   const menus = (
-    <Menu onClick={handleMenuClick}>
+    <Menu>
       <Menu.Item key="pdf" icon={<FilePdfOutlined />}>
         Generate CV (PDF)
       </Menu.Item>
@@ -4281,39 +4153,6 @@ const EmployeeForm = ({ icon_username } ) => {
         </div>
         <ul style={{ listStyleType: 'none', padding: 0 }}>
           {/* Sidebar items */}
-
-          <li style={{ marginBottom: '1rem', width: '100%' }}>
-            <button
-              style={{
-
-                background: 'none',
-                border: 'none',
-                color: '#fff',
-                textAlign: 'left',
-                width: '100%',
-                padding: '0.5rem 1rem',
-                cursor: 'pointer',
-              }}
-            >
-              <i className="pi pi-home" style={{ marginRight: '0.5rem' }}></i> Dashboard
-            </button>
-          </li>
-          
-          <li style={{ marginBottom: '1rem', width: '100%' }}>
-            <button
-              style={{
-                background: 'none',
-                border: 'none',
-                color: '#fff',
-                textAlign: 'left',
-                width: '100%',
-                padding: '0.5rem 1rem',
-                cursor: 'pointer',
-              }}
-            >
-              <i className="pi pi-cog" style={{ marginRight: '0.5rem' }}></i> Settings
-            </button>
-          </li>
 
 
           {userPrivileges === 'MANAGER' && (

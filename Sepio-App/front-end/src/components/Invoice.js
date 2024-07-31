@@ -875,8 +875,8 @@
 
 import React, { useState, useEffect } from 'react';
 import 'antd/dist/reset.css';
-import { Avatar, Layout, Input, List } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
+import { Avatar, Layout, Input, List, Menu, Upload, message, Dropdown } from 'antd';
+import { UserOutlined, UploadOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Button as PrimeButton } from 'primereact/button';
 import { IconField } from 'primereact/iconfield';
 import { InputIcon } from 'primereact/inputicon';
@@ -886,10 +886,97 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 const { Sider, Content } = Layout;
 
-const Invoice = () => {
+const Invoice = ({icon_username}) => {
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    avatarUrl: ''
+  })
+
+
+
+
+  const handleDeleteAvatar = () => {
+    axios.post(`/api/user/${icon_username}/delete-avatar`)
+      .then(response => {
+        setFormData(prevFormData => ({
+          ...prevFormData,
+          avatarUrl: null,
+        }));
+        message.success('Avatar deleted successfully');
+      })
+      .catch(error => {
+        console.error('Error deleting avatar:', error);
+        message.error('Failed to delete avatar');
+      });
+  };
+  
+
+  const handleFileChange = (file) => {
+    const formData = new FormData();
+    formData.append('avatar', file);
+  
+    axios.post(`/api/user/${icon_username}/avatar`, formData)
+      .then(response => {
+        const updatedAvatarUrl = response.data.avatarUrl;
+        setFormData(prevFormData => ({
+          ...prevFormData,
+          avatarUrl: updatedAvatarUrl,
+        }));
+        message.success('Avatar updated successfully');
+      })
+      .catch(error => {
+        console.error('Error updating avatar:', error);
+        message.error('Failed to update avatar');
+      });
+  };
+  
+
+
+
+
+
+  useEffect(() => {
+    if (icon_username) {
+      fetch(`/api/user/${icon_username}`)
+        .then(response => response.json())
+        .then(data => {
+          setFormData({ avatarUrl: data.avatarUrl });
+          console.log(data.avatarUrl);
+        })
+        .catch(error => {
+          console.log('Error fetching user privileges', error);
+        });
+    }
+  }, [icon_username]);
+
+
+
+
+
+  const menu = (
+    <Menu>
+      <Menu.Item key="1" icon={<UploadOutlined />}>
+        <Upload
+          showUploadList={false}
+          beforeUpload={(file) => {
+            handleFileChange(file);
+            return false;
+          }}
+        >
+          <span>Change Photo</span>
+        </Upload>
+      </Menu.Item>
+      <Menu.Item key="2" icon={<DeleteOutlined />} onClick={handleDeleteAvatar}>
+        Delete Photo
+      </Menu.Item>
+    </Menu>
+  );
+  
+
+
+
 
   useEffect(() => {
     // Fetch users from the API
@@ -963,7 +1050,17 @@ const Invoice = () => {
     <Layout style={{ minHeight: '100vh' }}>
       <Sider width={300} style={{ backgroundColor: '#007bff', color: '#fff' }}>
         <div style={{ padding: '1rem', textAlign: 'center' }}>
-          <Avatar size={100} icon={<UserOutlined />} style={{ marginBottom: '1rem' }} />
+        <Dropdown overlay={menu} trigger={['click']}>
+  <Avatar
+    size={100}
+    icon={!formData.avatarUrl && <UserOutlined />}
+    src={formData.avatarUrl}
+    style={{ marginBottom: '1rem', cursor: 'pointer' }}
+  >
+    {!formData.avatarUrl && icon_username.charAt(0)}
+  </Avatar>
+</Dropdown>
+
           <h3>Denis Gaidai</h3>
         </div>
         <ul style={{ listStyleType: 'none', padding: 0 }}>
@@ -1065,7 +1162,7 @@ const Invoice = () => {
                 <List.Item.Meta
                   avatar={
                     <Avatar
-                      src={user.avatar || <UserOutlined />}
+                      src={user.avatarUrl || <UserOutlined />}
                       style={{ backgroundColor: '#295bac' }}
                     />
                   }

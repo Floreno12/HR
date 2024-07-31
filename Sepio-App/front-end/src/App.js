@@ -27,7 +27,7 @@ function App() {
              <Route path = '/' element = {<SignUp/>}/>
             <Route path = '/login' element = {<Login setUsername={setUsername}/>}/>
             <Route path='/hrsystem' element={<RootView icon_username = {icon_username} />} />
-            <Route path = '/invoice' element = {<Invoice/>}/>
+            <Route path = '/invoice' element = {<Invoice icon_username = {icon_username}/>}/>
             <Route path = '/employees' element = {<Employees icon_username = {icon_username} />}/>
  
 
