@@ -1064,36 +1064,8 @@ const Invoice = ({icon_username}) => {
           <h3>Denis Gaidai</h3>
         </div>
         <ul style={{ listStyleType: 'none', padding: 0 }}>
-          <li style={{ marginBottom: '1rem', width: '100%' }}>
-            <button
-              style={{
-                background: 'none',
-                border: 'none',
-                color: '#fff',
-                textAlign: 'left',
-                width: '100%',
-                padding: '0.5rem 1rem',
-                cursor: 'pointer',
-              }}
-            >
-              <i className="pi pi-home" style={{ marginRight: '0.5rem' }}></i> Dashboard
-            </button>
-          </li>
-          <li style={{ marginBottom: '1rem', width: '100%' }}>
-            <button
-              style={{
-                background: 'none',
-                border: 'none',
-                color: '#fff',
-                textAlign: 'left',
-                width: '100%',
-                padding: '0.5rem 1rem',
-                cursor: 'pointer',
-              }}
-            >
-              <i className="pi pi-cog" style={{ marginRight: '0.5rem' }}></i> Settings
-            </button>
-          </li>
+         
+          
           <li style={{ marginBottom: '1rem', width: '100%' }}>
             <button
               onClick={emp}
@@ -1107,7 +1079,7 @@ const Invoice = ({icon_username}) => {
                 cursor: 'pointer',
               }}
             >
-              <i className="pi pi-user" style={{ marginRight: '0.5rem' }}></i> Employees
+              <i className="pi pi-users" style={{ marginRight: '0.5rem' }}></i> Employees
             </button>
           </li>
           <li style={{ marginBottom: '1rem', width: '100%' }}>

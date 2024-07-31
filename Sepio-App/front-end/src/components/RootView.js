@@ -4169,7 +4169,7 @@ const EmployeeForm = ({ icon_username } ) => {
                   cursor: 'pointer',
                 }}
               >
-                <i className="pi pi-user" style={{ marginRight: '0.5rem' }}></i> Employees
+                <i className="pi pi-users" style={{ marginRight: '0.5rem' }}></i> Employees
               </button>
             </li>
           )}

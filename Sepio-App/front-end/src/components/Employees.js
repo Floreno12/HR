@@ -1003,21 +1003,7 @@ const Users = ({ icon_username }) => {
         </div>
         <ul style={{ listStyleType: 'none', padding: 0 }}>
           {/* Sidebar items */}
-          <li style={{ marginBottom: '1rem', width: '100%' }}>
-            <button
-              style={{
-                background: 'none',
-                border: 'none',
-                color: '#fff',
-                textAlign: 'left',
-                width: '100%',
-                padding: '0.5rem 1rem',
-                cursor: 'pointer',
-              }}
-            >
-              <i className="pi pi-home" style={{ marginRight: '0.5rem' }}></i> Dashboard
-            </button>
-          </li>
+          
           <li style={{ marginBottom: '1rem', width: '100%' }}>
             <button
               style={{
@@ -1034,8 +1020,10 @@ const Users = ({ icon_username }) => {
               <i className="pi pi-users" style={{ marginRight: '0.5rem' }}></i> Employees
             </button>
           </li>
+
           <li style={{ marginBottom: '1rem', width: '100%' }}>
             <button
+              onClick={handle}
               style={{
                 background: 'none',
                 border: 'none',
@@ -1046,24 +1034,14 @@ const Users = ({ icon_username }) => {
                 cursor: 'pointer',
               }}
             >
-              <i className="pi pi-chart-line" style={{ marginRight: '0.5rem' }}></i> Analytics
+              <i className="pi pi-wallet" style={{ marginRight: '0.5rem' }}></i> invoices
             </button>
           </li>
-          <li style={{ marginBottom: '1rem', width: '100%' }}>
-            <button
-              style={{
-                background: 'none',
-                border: 'none',
-                color: '#fff',
-                textAlign: 'left',
-                width: '100%',
-                padding: '0.5rem 1rem',
-                cursor: 'pointer',
-              }}
-            >
-              <i className="pi pi-cog" style={{ marginRight: '0.5rem' }}></i> Settings
-            </button>
-          </li>
+
+
+
+          
+      
           <li style={{ marginBottom: '1rem', width: '100%' }}>
             <button
               style={{
