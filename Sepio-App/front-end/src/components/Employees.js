@@ -1359,11 +1359,22 @@ const Users = ({ icon_username }) => {
           />
         }
         title={
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <span style={{ marginLeft: 8 }}>{user.name}</span>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+              <span>{user.name}</span>
+            </div>
+            <div style={{ borderLeft: '2px solid #333', height: '24px', margin: '0 8px' }}></div>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', marginRight: '200px' }}>
+              <span>Email: {user.email}</span>
+            </div>
+            {/* <div style={{ borderLeft: '2px solid #333', height: '24px', margin: '0 8px' }}></div>
+            <PrimeButton
+              label="Generate Invoice"
+              onClick={() => generateInvoice(user.name)}
+              style={{ backgroundColor: '#007bff', color: 'white', borderRadius: '5px' }}
+            /> */}
           </div>
         }
-        description={<div style={{ marginTop: '-25px' }}>Email: {user.email}</div>}
       />
     </List.Item>
   )}
