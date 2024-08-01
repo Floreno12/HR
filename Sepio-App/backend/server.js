@@ -21,7 +21,6 @@ app.use(bodyParser.json());
 
 
 
-
 const parseTimeEstimate = (estimate) => {
   const timeParts = estimate.split(' ');
   let hours = 0;

@@ -4518,6 +4518,256 @@
 
 
 
+// import React, { useState, useEffect } from 'react';
+// import 'antd/dist/reset.css'; // Import Ant Design CSS
+// import { Input, Select, Card, Avatar, Layout, Form, Row, Col, Tooltip, Button as AntButton, Dropdown, Menu, Upload, message } from 'antd';
+// import { UserOutlined} from '@ant-design/icons';
+// import { Button as PrimeButton } from 'primereact/button';
+
+
+// import { Toolbar } from 'primereact/toolbar';
+// import { useNavigate, useLocation } from 'react-router-dom';
+// const { Header, Sider, Content } = Layout;
+// const { Option } = Select;
+
+// const EmployeeForm = ({ icon_username } ) => {
+//   const [avatarUrl, setAvatarUrl] = useState(null);
+//   const [users, setUsers] = useState([]);
+//   const [currentUserIndex, setCurrentUserIndex] = useState(0);
+//   const [userPrivileges, setUserPrivileges] = useState(null);
+//   const navigate = useNavigate();
+//   const location = useLocation();
+//   const [userData, setUserData] = useState({});
+//   const [form, setForm] = useState({
+//     name: '',
+//     type: '',
+//     skills: '',
+//     education: '',
+//     workExperience: '',
+//     rate: '',
+//     projectAccess: '',
+//     goals: '',
+//     avatarUrl: ''
+   
+//   });
+
+
+
+//   const types = ['Employee', 'Contractor'];
+
+//   useEffect(() => {
+//     if (location.state && location.state.user) {
+//       const user = location.state.user;
+//       console.log("User data received:", user);
+//       setUserData(user);
+//       setForm({
+//         name: user.name || '',
+//         type: user.type || '',
+//         skills: user.skills || '',
+//         education: user.education || '',
+//         workExperience: user.workExperience || '',
+//         rate: user.rate || '',
+//         projectAccess: user.projectAccess || '',
+//         goals: user.goals || '',
+//         avatarUrl: user.avatarUrl || ''
+//       });
+//       setAvatarUrl(user.avatarUrl || '');
+//     }
+//   }, [location.state]);
+
+ 
+
+
+
+
+//   useEffect(() => {
+//     if (icon_username) {
+//       fetch(`/api/user/${icon_username}`)
+//         .then(response => response.json())
+//         .then(data => {
+//           setUserPrivileges(data.privileges);
+//           console.log(data.privileges);
+//         })
+//         .catch(error => {
+//           console.log('Error fetching user privileges', error);
+//         });
+//     }
+//   }, [icon_username]);
+
+
+//   //new
+
+//   const endContent = (
+//     <React.Fragment>
+//       <PrimeButton
+//         icon="pi pi-chevron-left"
+//         style={{ backgroundColor: '#007bff', borderRadius: '5px 0px 0px 5px', color: 'white' }}
+//         className="mr-2"
+//         onClick={() => handleNavigation('left')}
+//       />
+//       <PrimeButton
+//         icon="pi pi-chevron-right"
+//         style={{ backgroundColor: '#007bff', borderRadius: '0 5px 5px 0', color: 'white' }}
+//         onClick={() => handleNavigation('right')}
+//       />
+//     </React.Fragment>
+//   );
+
+//   function handle() {
+//     navigate('/invoice');
+//   }
+
+//   function logout() {
+//     navigate('/login');
+//   }
+
+
+//   function emp () {
+//     navigate('/employees');
+//   }
+
+
+
+//   useEffect(() => {
+//     fetch('/api/users')
+//       .then(response => response.json())
+//       .then(data => {
+//         // Assuming 'data' is an array of users
+//         // Sort the users by id to ensure the correct order
+//         const sortedUsers = data.sort((a, b) => a.id - b.id);
+//         setUsers(sortedUsers);
+//         console.log(sortedUsers);
+//         // Set currentUserIndex to the correct index based on initial user
+//         if (location.state && location.state.user) {
+//           const initialUserIndex = sortedUsers.findIndex(user => user.id === location.state.user.id);
+//           setCurrentUserIndex(initialUserIndex !== -1 ? initialUserIndex : 0);
+//         } else {
+//           setCurrentUserIndex(0); // Assuming we start with the first user
+//         }
+//       })
+//       .catch(error => console.error('Error fetching users:', error));
+//   }, [location.state]);
+
+
+
+
+//   const handleNavigation = (direction) => {
+//     let newIndex = currentUserIndex;
+//     if (direction === 'left') {
+//       newIndex = (currentUserIndex > 0) ? currentUserIndex - 1 : users.length - 1;
+//     } else if (direction === 'right') {
+//       newIndex = (currentUserIndex < users.length - 1) ? currentUserIndex + 1 : 0;
+//     }
+//     setCurrentUserIndex(newIndex);
+
+//     const newUser = users[newIndex];
+//     setUserData(newUser);
+//     setForm({
+//       name: newUser.name || '',
+//       type: newUser.type || '',
+//       skills: newUser.skills || '',
+//       education: newUser.education || '',
+//       workExperience: newUser.workExperience || '',
+//       rate: newUser.rate || '',
+//       projectAccess: newUser.projectAccess || '',
+//       goals: newUser.goals || '',
+//       avatarUrl: newUser.avatarUrl || ''
+//     });
+//   };
+
+//   return (
+//     <Layout style={{ minHeight: '100vh' }}>
+//       <Sider width={300} style={{ backgroundColor: '#007bff', color: '#fff' }}>
+//         <div style={{ padding: '1rem', textAlign: 'center' }}>
+//         <Dropdown  trigger={['click']}>
+//             <Avatar
+//               size={100}
+//               icon={!avatarUrl && <UserOutlined />}
+//               src={form.avatarUrl}
+//               style={{ marginBottom: '1rem', cursor: 'pointer' }}
+//             />
+//           </Dropdown>
+//           <h3>{form.name}</h3>
+//         </div>
+//         <ul style={{ listStyleType: 'none', padding: 0 }}>
+//           {/* Sidebar items */}
+
+
+//           {userPrivileges === 'MANAGER' && (
+//             <li style={{ marginBottom: '1rem', width: '100%' }}>
+//               <button
+//               onClick = {emp}
+//                 style={{
+//                   background: 'none',
+//                   border: 'none',
+//                   color: '#fff',
+//                   textAlign: 'left',
+//                   width: '100%',
+//                   padding: '0.5rem 1rem',
+//                   cursor: 'pointer',
+//                 }}
+//               >
+//                 <i className="pi pi-users" style={{ marginRight: '0.5rem' }}></i> Employees
+//               </button>
+//             </li>
+//           )}
+
+//           <li style={{ marginBottom: '1rem', width: '100%' }}>
+//             <button
+//               onClick={handle}
+//               style={{
+//                 background: 'none',
+//                 border: 'none',
+//                 color: '#fff',
+//                 textAlign: 'left',
+//                 width: '100%',
+//                 padding: '0.5rem 1rem',
+//                 cursor: 'pointer',
+//               }}
+//             >
+//               <i className="pi pi-wallet" style={{ marginRight: '0.5rem' }}></i> invoices
+//             </button>
+//           </li>
+//           <li style={{ marginBottom: '1rem', width: '100%' }}>
+//             <button
+//               onClick={logout}
+//               style={{
+//                 background: 'none',
+//                 border: 'none',
+//                 color: '#fff',
+//                 textAlign: 'left',
+//                 width: '100%',
+//                 padding: '0.5rem 1rem',
+//                 cursor: 'pointer',
+//               }}
+//             >
+//               <i className="pi pi-sign-out" style={{ marginRight: '0.5rem' }}></i> Logout
+//             </button>
+//           </li>
+//         </ul>
+//       </Sider>
+//       <Layout>
+//         <Toolbar end={endContent} />
+//         <Content style={{ padding: '1rem' }}>
+//         </Content>
+//       </Layout>
+//     </Layout>
+//   );
+// };
+
+// export default EmployeeForm;
+
+
+
+
+
+
+
+
+
+
+
+
 
 import React, { useState, useEffect } from 'react';
 import 'antd/dist/reset.css'; // Import Ant Design CSS
@@ -4859,22 +5109,36 @@ const EmployeeForm = ({ icon_username } ) => {
 
   const endContent = (
     <React.Fragment>
+       
       <PrimeButton
         label="Save"
         icon="pi pi-check"
         onClick={handleSave}
         style={{ color: 'white', backgroundColor: '#007bff', border: 'none', borderRadius: '5px', marginRight: '15px' }}
       />
+       <span style={{ marginRight: '10px', fontWeight: 'bold' }}>
+        {currentUserIndex + 1} of {users.length}
+      </span>
       <PrimeButton
         icon="pi pi-chevron-left"
-        style={{ backgroundColor: '#007bff', borderRadius: '5px 0px 0px 5px', color: 'white' }}
+        style={{
+          backgroundColor: currentUserIndex === 0 ? 'gray' : '#007bff',
+          borderRadius: '5px 0px 0px 5px',
+          color: 'white'
+        }}
         className="mr-2"
         onClick={() => handleNavigation('left')}
+        disabled={currentUserIndex === 0}
       />
       <PrimeButton
         icon="pi pi-chevron-right"
-        style={{ backgroundColor: '#007bff', borderRadius: '0 5px 5px 0', color: 'white' }}
+        style={{
+          backgroundColor: currentUserIndex === users.length - 1 ? 'gray' : '#007bff',
+          borderRadius: '0 5px 5px 0',
+          color: 'white'
+        }}
         onClick={() => handleNavigation('right')}
+        disabled={currentUserIndex === users.length - 1}
       />
     </React.Fragment>
   );
