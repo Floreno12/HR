@@ -4518,14 +4518,13 @@
 
 
 
+
+
+
 // import React, { useState, useEffect } from 'react';
 // import 'antd/dist/reset.css'; // Import Ant Design CSS
 // import { Input, Select, Card, Avatar, Layout, Form, Row, Col, Tooltip, Button as AntButton, Dropdown, Menu, Upload, message } from 'antd';
-// import { UserOutlined} from '@ant-design/icons';
-// import { Button as PrimeButton } from 'primereact/button';
-
-
-// import { Toolbar } from 'primereact/toolbar';
+// import { UserOutlined, FilePdfOutlined, FileWordOutlined, UploadOutlined, DeleteOutlined } from '@ant-design/icons';
 // import { useNavigate, useLocation } from 'react-router-dom';
 // const { Header, Sider, Content } = Layout;
 // const { Option } = Select;
@@ -4555,6 +4554,8 @@
 
 //   const types = ['Employee', 'Contractor'];
 
+  
+ 
 //   useEffect(() => {
 //     if (location.state && location.state.user) {
 //       const user = location.state.user;
@@ -4575,9 +4576,6 @@
 //     }
 //   }, [location.state]);
 
- 
-
-
 
 
 //   useEffect(() => {
@@ -4594,24 +4592,81 @@
 //     }
 //   }, [icon_username]);
 
-
 //   //new
 
-//   const endContent = (
-//     <React.Fragment>
-//       <PrimeButton
-//         icon="pi pi-chevron-left"
-//         style={{ backgroundColor: '#007bff', borderRadius: '5px 0px 0px 5px', color: 'white' }}
-//         className="mr-2"
-//         onClick={() => handleNavigation('left')}
-//       />
-//       <PrimeButton
-//         icon="pi pi-chevron-right"
-//         style={{ backgroundColor: '#007bff', borderRadius: '0 5px 5px 0', color: 'white' }}
-//         onClick={() => handleNavigation('right')}
-//       />
-//     </React.Fragment>
+//   const handleUploadChange = info => {
+//     if (info.file.status !== 'uploading') {
+//       const formData = new FormData();
+//       formData.append('avatar', info.file.originFileObj);
+//       formData.append('id', userData.id);
+
+//       fetch('/api/user/avatar', {
+//         method: 'POST',
+//         body: formData,
+//       })
+//         .then(response => response.json())
+//         .then(data => {
+//           setAvatarUrl(data.avatarUrl);
+//           message.success(`${info.file.name} file uploaded successfully`);
+//         })
+//         .catch(error => {
+//           console.error('Error uploading avatar', error);
+//           message.error(`${info.file.name} file upload failed.`);
+//         });
+//     }
+//   };
+
+//   const handleDeleteAvatar = () => {
+//     fetch('/api/user/delete-avatar', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({ id: userData.id }), // Send the user's ID to delete the avatar
+//     })
+//       .then(response => response.json())
+//       .then(data => {
+//         setAvatarUrl(null);
+//         setForm(prevForm => ({ ...prevForm, avatarUrl: '' })); // Update the form state
+//         message.success('Avatar deleted successfully');
+//       })
+//       .catch(error => {
+//         console.error('Error deleting avatar', error);
+//         message.error('Avatar deletion failed.');
+//       });
+//   };
+  
+
+//   const menu = (
+//     <Menu>
+//       <Menu.Item key="1" icon={<UploadOutlined />}>
+//         <Upload
+//           showUploadList={false}
+//           onChange={handleUploadChange}
+//         >
+//           <span>Change Photo</span>
+//         </Upload>
+//       </Menu.Item>
+//       <Menu.Item key="2" icon={<DeleteOutlined />} onClick={handleDeleteAvatar}>
+//         Delete Photo
+//       </Menu.Item>
+//     </Menu>
 //   );
+
+
+//   const items = [
+//     {
+//       label: 'Update',
+//       icon: 'pi pi-refresh'
+//     },
+//     {
+//       label: 'Delete',
+//       icon: 'pi pi-times'
+//     }
+//   ];
+
+
+
 
 //   function handle() {
 //     navigate('/invoice');
@@ -4625,6 +4680,7 @@
 //   function emp () {
 //     navigate('/employees');
 //   }
+
 
 
 
@@ -4651,35 +4707,13 @@
 
 
 
-//   const handleNavigation = (direction) => {
-//     let newIndex = currentUserIndex;
-//     if (direction === 'left') {
-//       newIndex = (currentUserIndex > 0) ? currentUserIndex - 1 : users.length - 1;
-//     } else if (direction === 'right') {
-//       newIndex = (currentUserIndex < users.length - 1) ? currentUserIndex + 1 : 0;
-//     }
-//     setCurrentUserIndex(newIndex);
 
-//     const newUser = users[newIndex];
-//     setUserData(newUser);
-//     setForm({
-//       name: newUser.name || '',
-//       type: newUser.type || '',
-//       skills: newUser.skills || '',
-//       education: newUser.education || '',
-//       workExperience: newUser.workExperience || '',
-//       rate: newUser.rate || '',
-//       projectAccess: newUser.projectAccess || '',
-//       goals: newUser.goals || '',
-//       avatarUrl: newUser.avatarUrl || ''
-//     });
-//   };
 
 //   return (
 //     <Layout style={{ minHeight: '100vh' }}>
 //       <Sider width={300} style={{ backgroundColor: '#007bff', color: '#fff' }}>
 //         <div style={{ padding: '1rem', textAlign: 'center' }}>
-//         <Dropdown  trigger={['click']}>
+//         <Dropdown overlay={menu} trigger={['click']}>
 //             <Avatar
 //               size={100}
 //               icon={!avatarUrl && <UserOutlined />}
@@ -4747,8 +4781,9 @@
 //         </ul>
 //       </Sider>
 //       <Layout>
-//         <Toolbar end={endContent} />
+      
 //         <Content style={{ padding: '1rem' }}>
+         
 //         </Content>
 //       </Layout>
 //     </Layout>
@@ -4756,10 +4791,6 @@
 // };
 
 // export default EmployeeForm;
-
-
-
-
 
 
 
@@ -4796,6 +4827,7 @@ const EmployeeForm = ({ icon_username } ) => {
   const [currentUserIndex, setCurrentUserIndex] = useState(0);
   const [userPrivileges, setUserPrivileges] = useState(null);
   const navigate = useNavigate();
+  const [componentKey, setComponentKey] = useState(Date.now());
   const location = useLocation();
   const [userData, setUserData] = useState({});
   const [form, setForm] = useState({
@@ -4987,7 +5019,7 @@ const EmployeeForm = ({ icon_username } ) => {
       const formData = new FormData();
       formData.append('avatar', info.file.originFileObj);
       formData.append('id', userData.id);
-
+  
       fetch('/api/user/avatar', {
         method: 'POST',
         body: formData,
@@ -4995,6 +5027,7 @@ const EmployeeForm = ({ icon_username } ) => {
         .then(response => response.json())
         .then(data => {
           setAvatarUrl(data.avatarUrl);
+          setForm(prevForm => ({ ...prevForm, avatarUrl: data.avatarUrl })); // Added this line
           message.success(`${info.file.name} file uploaded successfully`);
         })
         .catch(error => {
@@ -5004,18 +5037,20 @@ const EmployeeForm = ({ icon_username } ) => {
     }
   };
 
+
   const handleDeleteAvatar = () => {
     fetch('/api/user/delete-avatar', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ id: userData.id }), // Send the user's ID to delete the avatar
+      body: JSON.stringify({ id: userData.id }),
     })
       .then(response => response.json())
       .then(data => {
         setAvatarUrl(null);
-        setForm(prevForm => ({ ...prevForm, avatarUrl: '' })); // Update the form state
+        setForm(prevForm => ({ ...prevForm, avatarUrl: '' }));
+        setComponentKey(Date.now()); // Force re-render by changing the key
         message.success('Avatar deleted successfully');
       })
       .catch(error => {
@@ -5207,7 +5242,7 @@ const EmployeeForm = ({ icon_username } ) => {
   };
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout key={componentKey} style={{ minHeight: '100vh' }}>
       <Sider width={300} style={{ backgroundColor: '#007bff', color: '#fff' }}>
         <div style={{ padding: '1rem', textAlign: 'center' }}>
         <Dropdown overlay={menu} trigger={['click']}>
@@ -5344,3 +5379,11 @@ const EmployeeForm = ({ icon_username } ) => {
 };
 
 export default EmployeeForm;
+
+
+
+
+
+
+
+
