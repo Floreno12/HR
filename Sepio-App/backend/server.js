@@ -1,209 +1,4 @@
 
-// const express = require('express');
-// const multer = require('multer');
-// const path = require('path');
-// const bodyParser = require('body-parser');
-// const { PrismaClient } = require('@prisma/client');
-// const axios = require('axios');
-// const nodeHtmlToImage = require('node-html-to-image');
-// const bcrypt = require('bcrypt');
-// const app = express();
-// const puppeteer = require('puppeteer');
-// const prisma = new PrismaClient();
-// const PORT = process.env.PORT || 3000;
-// const fs = require('fs');
-
-
-
-
-// // Middleware to parse JSON bodies
-// app.use(bodyParser.json());
-
-
-
-
-// const parseTimeEstimate = (estimate) => {
-//   const timeParts = estimate.split(' ');
-//   let hours = 0;
-
-//   timeParts.forEach(part => {
-//     if (part.endsWith('d')) {
-//       // Convert days to hours (assume 8 hours per day)
-//       hours += parseInt(part, 10) * 8;
-//     } else if (part.endsWith('h')) {
-//       hours += parseInt(part, 10);
-//     }
-//   });
-
-//   return hours;
-// };
-
-
-// app.post('/api/generate-invoice', async (req, res) => {
-//   const { employeeName } = req.body;
-
-//   try {
-//     // Find the employee in the database
-//     const employee = await prisma.user.findUnique({ where: { name: employeeName } });
-//     if (!employee) {
-//       return res.status(404).json({ error: 'Employee not found' });
-//     }
-
-//     // Fetch all tasks from Jira (including completed tasks)
-//     const response = await axios.get(JIRA_API_URL, {
-//       params: {
-//         jql: `assignee="${employeeName}"`, // Removed status filter to include all tasks
-//         fields: 'summary,timetracking',
-//         maxResults: 1000 // Adjust as needed
-//       },
-//       headers: {
-//         Authorization: `Basic ${Buffer.from(`${JIRA_USER_EMAIL}:${JIRA_API_TOKEN}`).toString('base64')}`,
-//         Accept: 'application/json',
-//       },
-//     });
-
-//     // Log entire response to debug
-//     console.log('Jira API Response:', JSON.stringify(response.data, null, 2));
-
-//     if (!response.data.issues || response.data.issues.length === 0) {
-//       return res.status(500).json({ error: 'No issues found for the employee in Jira' });
-//     }
-
-//     // Process the Jira response
-//     let totalHours = 0;
-//     const tasks = response.data.issues.map((issue) => {
-//       const originalEstimate = issue.fields.timetracking?.originalEstimate || '0h';
-//       const hours = parseTimeEstimate(originalEstimate);
-//       totalHours += hours;
-
-//       return {
-//         title: issue.fields.summary,
-//         originalEstimate: originalEstimate,
-//       };
-//     });
-
-//     // Fetch the hourly rate for the employee
-//     const hourlyRate = employee.rate || 0; // Fetch hourly rate from database or default to 0
-//     const totalAmount = totalHours * hourlyRate;
-
-//     // Create invoice content
-//     const invoiceContent = tasks.map((task) => {
-//       return `Task: ${task.title}, Time: ${task.originalEstimate}`;
-//     }).join('<br>') + `<br><br>Total Hours: ${totalHours}h<br>Total Amount: $${totalAmount}`;
-
-//     // Generate invoice HTML
-//     const invoiceHtml = `
-//       <html>
-//         <body>
-//           <h1>Invoice for ${employeeName}</h1>
-//           <p>${invoiceContent}</p>
-//         </body>
-//       </html>
-//     `;
-
-//     // Generate PNG from HTML
-//     const imagePath = path.join(__dirname, 'invoice.png');
-//     const browser = await puppeteer.launch();
-//     const page = await browser.newPage();
-//     await page.setContent(invoiceHtml);
-//     await page.screenshot({ path: imagePath });
-
-//     await browser.close();
-
-//     // Respond with the URL of the generated invoice
-//     res.json({ invoiceUrl: `http://localhost:${PORT}/invoice.png` });
-//   } catch (error) {
-//     console.error('Error generating invoice:', error.response ? error.response.data : error.message);
-//     res.status(500).json({ error: 'Failed to generate invoice' });
-//   }
-// });
-
-
-
-
-// app.get('/api/users', async (req, res) => {
-//   try {
-//     const users = await prisma.user.findMany();
-//     res.json(users);
-//   } catch (error) {
-//     console.error('Error fetching users:', error);
-//     res.status(500).json({ error: 'Failed to fetch users' });
-//   }
-// });
-
-
-
-
-// app.get('/api/user/:username', async (req, res) => {
-//   const { username } = req.params;
-
-//   try {
-//     const user = await prisma.user.findUnique({
-//       where: { name: username },
-//       select: {
-//         privileges: true,
-//         skills: true,
-//         education: true,
-//         workExperience: true,
-//         rate: true,
-//         type: true,
-//         projectAccess: true,
-//         personalGoals: true,
-//         avatarUrl: true
-//       }
-//     });
-
-//     if (!user) {
-//       return res.status(404).json({ message: 'User not found' });
-//     }
-
-//     res.json(user);
-//   } catch (error) {
-//     console.error('Error message:', error);
-//     res.status(500).json({ message: 'Database error' });
-//   }
-// });
-
-
-
-
-
-
-// // Serve static files from the React app
-// app.use(express.static(path.join(__dirname, '../front-end/build')));
-// app.use('/invoice', express.static(path.join(__dirname, 'invoice')));
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join(__dirname, '../front-end/build/index.html'));
-// });
-
-// app.listen(PORT, () => {
-//   console.log(`Server is running on port ${PORT}`);
-// });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -274,8 +69,6 @@ const parseTimeEstimate = (estimate) => {
 		},
 	  });
   
-	  console.log('JIRA response data:', response.data); // Log the full JIRA response data
-  
 	  if (!response.data.issues || response.data.issues.length === 0) {
 		return res.status(500).json({ error: 'No issues found for the employee in Jira' });
 	  }
@@ -283,8 +76,6 @@ const parseTimeEstimate = (estimate) => {
 	  let totalHours = 0;
 	  const tasks = response.data.issues.map((issue) => {
 		const originalEstimate = issue.fields.timetracking?.originalEstimate || '0h';
-		console.log('Original Estimate:', originalEstimate); // Log the original estimate
-  
 		const hours = parseTimeEstimate(originalEstimate);
 		totalHours += hours;
   
@@ -296,7 +87,20 @@ const parseTimeEstimate = (estimate) => {
 	  });
   
 	  const hourlyRate = employee.rate || 0;
-	  const totalAmount = totalHours * hourlyRate;
+  
+	  // Correct rounding logic for total hours
+	  const totalHoursFormatted = totalHours.toFixed(2); // Ensure 2 decimal places for hours
+	  const totalAmount = parseFloat(totalHoursFormatted) * hourlyRate; // Use formatted hours
+	  const totalAmountFormatted = (Math.round(totalAmount * 100) / 100).toFixed(2); // Round to 2 decimal places
+  
+	  // Debug information
+	  console.log('Parsed Tasks:', tasks);
+	  console.log('Total Hours:', totalHours);
+	  console.log('Hourly Rate:', hourlyRate);
+	  console.log('Total Amount:', totalAmount);
+  
+	  console.log('Formatted Total Hours:', totalHoursFormatted);
+	  console.log('Formatted Total Amount:', totalAmountFormatted);
   
 	  const templateBytes = fs.readFileSync(path.join(__dirname, 'invoice', 'INVOICE.pdf'));
 	  const pdfDoc = await PDFDocument.load(templateBytes);
@@ -306,7 +110,7 @@ const parseTimeEstimate = (estimate) => {
 	  // Table Header
 	  const tableY = 540;
 	  firstPage.drawText('Description', { x: 50, y: tableY, size: 12, color: rgb(0, 0, 0) });
-	  firstPage.drawText('Hours', { x: 555, y: tableY, size: 12, color: rgb(0, 0, 0) });
+	  firstPage.drawText('Hours', { x: 550, y: tableY, size: 12, color: rgb(0, 0, 0) });
   
 	  // Draw header line
 	  firstPage.drawLine({
@@ -318,19 +122,19 @@ const parseTimeEstimate = (estimate) => {
   
 	  // Draw vertical lines
 	  firstPage.drawLine({
-		start: { x: 50, y: tableY -5 },
+		start: { x: 50, y: tableY - 5 },
 		end: { x: 50, y: tableY - (tasks.length * 20) - 10 },
 		thickness: 1,
 		color: rgb(0, 0, 0),
 	  });
 	  firstPage.drawLine({
-		start: { x: 550, y: tableY -5 },
+		start: { x: 550, y: tableY - 5 },
 		end: { x: 550, y: tableY - (tasks.length * 20) - 10 },
 		thickness: 1,
 		color: rgb(0, 0, 0),
 	  });
 	  firstPage.drawLine({
-		start: { x: 600, y: tableY -5},
+		start: { x: 600, y: tableY - 5 },
 		end: { x: 600, y: tableY - (tasks.length * 20) - 10 },
 		thickness: 1,
 		color: rgb(0, 0, 0),
@@ -353,8 +157,8 @@ const parseTimeEstimate = (estimate) => {
 		taskY -= 20;
 	  });
   
-	  firstPage.drawText(`Total Hours: ${totalHours.toFixed(2)}h`, { x: 50, y: taskY - 20, size: 12, color: rgb(1, 0, 0) });
-	  firstPage.drawText(`Total Amount: $${totalAmount.toFixed(2)}`, { x: 50, y: taskY - 40, size: 12, color: rgb(1, 0, 0) });
+	  firstPage.drawText(`Total Hours: ${totalHoursFormatted}h`, { x: 50, y: taskY - 20, size: 12, color: rgb(1, 0, 0) });
+	  firstPage.drawText(`Total Amount: $${totalAmountFormatted}`, { x: 50, y: taskY - 40, size: 12, color: rgb(1, 0, 0) });
   
 	  const pdfBytes = await pdfDoc.save();
 	  const outputPath = path.join(__dirname, 'invoice', 'INVOICE_OUTPUT.pdf');

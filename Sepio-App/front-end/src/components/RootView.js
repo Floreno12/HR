@@ -5144,14 +5144,7 @@ const EmployeeForm = ({ icon_username } ) => {
 
   const endContent = (
     <React.Fragment>
-       
-      <PrimeButton
-        label="Save"
-        icon="pi pi-check"
-        onClick={handleSave}
-        style={{ color: 'white', backgroundColor: '#007bff', border: 'none', borderRadius: '5px', marginRight: '15px' }}
-      />
-       <span style={{ marginRight: '10px', fontWeight: 'bold' }}>
+      <span style={{ marginRight: '10px', fontWeight: 'bold' }}>
         {currentUserIndex + 1} of {users.length}
       </span>
       <PrimeButton
@@ -5175,8 +5168,15 @@ const EmployeeForm = ({ icon_username } ) => {
         onClick={() => handleNavigation('right')}
         disabled={currentUserIndex === users.length - 1}
       />
+      <PrimeButton
+        label="Save"
+        icon="pi pi-check"
+        onClick={handleSave}
+        style={{ color: 'white', backgroundColor: '#007bff', border: 'none', borderRadius: '5px', marginLeft: '15px' }}
+      />
     </React.Fragment>
   );
+  
 
   function handle() {
     navigate('/invoice');

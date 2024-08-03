@@ -1,0 +1,5 @@
+{"level":"info","message":"Server is running on port 3000","timestamp":"2024-08-03T05:52:47.894Z"}
+{"level":"info","message":"Server is running on port 3000","timestamp":"2024-08-03T05:52:48.115Z"}
+{"level":"info","message":"Server is running on port 3000","timestamp":"2024-08-03T05:52:48.354Z"}
+{"level":"info","message":"Request received to generate invoice for employee: Denis Gaidai","timestamp":"2024-08-03T05:52:56.767Z"}
+{"level":"info","message":"Invoice generated successfully for employee: Denis Gaidai","timestamp":"2024-08-03T05:52:57.562Z"}
