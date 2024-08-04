@@ -4800,6 +4800,369 @@
 
 
 
+// import React, { useState, useEffect } from 'react';
+// import 'antd/dist/reset.css'; // Import Ant Design CSS
+// import { Input, Select, Card, Avatar, Layout, Form, Row, Col, Tooltip, Button as AntButton, Dropdown, Menu, Upload, message } from 'antd';
+// import { UserOutlined, FilePdfOutlined, FileWordOutlined } from '@ant-design/icons';
+// import LooksOneIcon from '@mui/icons-material/LooksOne';
+// import { Button as PrimeButton } from 'primereact/button';
+// import Fab from '@mui/material/Fab';
+// import Looks3Icon from '@mui/icons-material/Looks3';
+// // import LooksThreeIcon from '@mui/icons-material/LooksThree';
+// import LooksTwoIcon from '@mui/icons-material/LooksTwo';
+// import { IconField } from 'primereact/iconfield';
+// import { InputIcon } from 'primereact/inputicon';
+// import { InputText } from 'primereact/inputtext';
+// import { Toolbar } from 'primereact/toolbar';
+// import { useNavigate, useLocation } from 'react-router-dom';
+// import { jsPDF } from "jspdf";
+// import { Document, Packer, Paragraph, TextRun, AlignmentType } from "docx";
+// import { saveAs } from "file-saver";
+// const { Header, Sider, Content } = Layout;
+// const { Option } = Select;
+
+// const EmployeeForm = ({ icon_username } ) => {
+//   const [avatarUrl, setAvatarUrl] = useState(null);
+//   const [componentKey, setComponentKey] = useState(Date.now());
+//   const location = useLocation();
+//   const [userData, setUserData] = useState({});
+//   const [form, setForm] = useState({
+//     name: '',
+//     type: '',
+//     skills: '',
+//     education: '',
+//     workExperience: '',
+//     rate: '',
+//     projectAccess: '',
+//     goals: '',
+//     avatarUrl: ''
+   
+//   });
+
+
+
+//   const types = ['Employee', 'Contractor'];
+
+
+
+
+
+//   const handleMenuClick = (e) => {
+//     if (e.key === 'pdf') {
+//       generatePDF();
+//     } else if (e.key === 'docx') {
+//       generateDOCX();
+//     }
+//   };
+
+
+
+//   const generatePDF = () => {
+//     const doc = new jsPDF();
+  
+//     // Get the page width to center the title
+//     const pageWidth = doc.internal.pageSize.getWidth();
+//     const title = `Employee Information ${form.name}`;
+  
+//     // Calculate the text width to center it
+//     const textWidth = doc.getTextWidth(title);
+//     const x = (pageWidth - textWidth) / 2;
+  
+//     // Add the centered title
+//     doc.setFontSize(20);
+//     doc.setFont('helvetica', 'bold');
+//     doc.text(title, x, 10);
+  
+//     // Define a helper function to add a section with a header
+//     const addSection = (header, content, y) => {
+//       doc.setFontSize(16); // Set font size for the header
+//       doc.setFont('helvetica', 'bold'); // Set font style to bold
+//       doc.text(header, 10, y); // Add header text
+  
+//       doc.setFontSize(12); // Reset font size for the content
+//       doc.setFont('helvetica', 'normal'); // Reset font style to normal
+//       doc.text(content || '', 10, y + 10); // Add content text
+//     };
+  
+//     let y = 30;
+//     addSection('Skills', form.skills, y);
+//     y += 20; // Adjust y position for the next section
+  
+//     addSection('Education', form.education, y);
+//     y += 20;
+  
+//     addSection('Rate', form.rate, y);
+//     y += 20;
+  
+//     addSection('Type', form.type, y);
+//     y += 20;
+  
+//     addSection('Work Experience', form.workExperience, y);
+//     y += 20;
+  
+//     addSection('Project Access', form.projectAccess, y);
+//     y += 20;
+  
+//     addSection('Goals', form.goals, y);
+  
+//     doc.save('employee_information.pdf');
+//   };
+  
+
+
+
+
+
+//   const generateDOCX = () => {
+//     const doc = new Document({
+//       sections: [
+//         {
+//           properties: {},
+//           children: [
+//             new Paragraph({
+//               alignment: AlignmentType.CENTER,
+//               children: [
+//                 new TextRun({
+//                   text: `Employee Information ${form.name}`,
+//                   bold: true,
+//                   size: 32,
+//                 }),
+//               ],
+//             }),
+//             ...[
+//               { header: 'Skills', content: form.skills },
+//               { header: 'Education', content: form.education },
+//               { header: 'Rate', content: form.rate },
+//               { header: 'Type', content: form.type },
+//               { header: 'Work Experience', content: form.workExperience },
+//               { header: 'Project Access', content: form.projectAccess },
+//               { header: 'Goals', content: form.goals },
+//             ].map((section) => [
+//               new Paragraph({
+//                 spacing: {
+//                   before: 200,
+//                 },
+//                 children: [
+//                   new TextRun({
+//                     text: section.header,
+//                     bold: true,
+//                     size: 24,
+//                   }),
+//                 ],
+//               }),
+//               new Paragraph({
+//                 children: [
+//                   new TextRun({
+//                     text: section.content,
+//                     size: 24,
+//                   }),
+//                 ],
+//               }),
+//             ]).flat(),
+//           ],
+//         },
+//       ],
+//     });
+  
+//     Packer.toBlob(doc).then((blob) => {
+//       saveAs(blob, "employee_information.docx");
+//     });
+//   };
+
+
+
+//   useEffect(() => {
+//     if (location.state && location.state.user) {
+//       const user = location.state.user;
+//       console.log("User data received:", user);
+//       setUserData(user);
+//       setForm({
+//         name: user.name || '',
+//         type: user.type || '',
+//         skills: user.skills || '',
+//         education: user.education || '',
+//         workExperience: user.workExperience || '',
+//         rate: user.rate || '',
+//         projectAccess: user.projectAccess || '',
+//         goals: user.goals || '',
+//         avatarUrl: user.avatarUrl || ''
+//       });
+//       setAvatarUrl(user.avatarUrl || '');
+//     }
+//   }, [location.state]);
+
+
+
+//   useEffect(() => {
+//     if (icon_username) {
+//       fetch(`/api/user/${icon_username}`)
+//         .then(response => response.json())
+//         .then(data => {
+//           setUserPrivileges(data.privileges);
+//           console.log(data.privileges);
+//         })
+//         .catch(error => {
+//           console.log('Error fetching user privileges', error);
+//         });
+//     }
+//   }, [icon_username]);
+
+
+//   const menus = (
+//     <Menu onClick={handleMenuClick}>
+//       <Menu.Item key="pdf" icon={<FilePdfOutlined />}>
+//         Generate CV (PDF)
+//       </Menu.Item>
+//       <Menu.Item key="docx" icon={<FileWordOutlined />}>
+//         Generate CV (DOCX)
+//       </Menu.Item>
+//     </Menu>
+//   );
+
+//   const items = [
+//     {
+//       label: 'Update',
+//       icon: 'pi pi-refresh'
+//     },
+//     {
+//       label: 'Delete',
+//       icon: 'pi pi-times'
+//     }
+//   ];
+
+//   const startContent = (
+//     <React.Fragment>
+//       <PrimeButton icon="pi pi-plus" style={{ backgroundColor: '#007bff', borderRadius: '5px 0px 0px 5px', color: 'white', }} className="mr-2" />
+//       <Dropdown overlay={menus} trigger={['click']}>
+//         <PrimeButton icon="pi pi-upload" style={{ backgroundColor: '#007bff', borderRadius: '0 5px 5px 0', color: 'white', }} />
+//       </Dropdown>
+//     </React.Fragment>
+//   );
+
+//   const centerContent = (
+//     <div style = {{marginRight: '-70px'}}>
+//       <IconField iconPosition="left">
+//         <InputIcon className="pi pi-search" />
+//         <InputText placeholder="Search" />
+//       </IconField>
+//     </div>
+//   );
+
+
+//   useEffect(() => {
+//     fetch('/api/users')
+//       .then(response => response.json())
+//       .then(data => {
+//         // Assuming 'data' is an array of users
+//         // Sort the users by id to ensure the correct order
+//         const sortedUsers = data.sort((a, b) => a.id - b.id);
+//         setUsers(sortedUsers);
+//         console.log(sortedUsers);
+//         // Set currentUserIndex to the correct index based on initial user
+//         if (location.state && location.state.user) {
+//           const initialUserIndex = sortedUsers.findIndex(user => user.id === location.state.user.id);
+//           setCurrentUserIndex(initialUserIndex !== -1 ? initialUserIndex : 0);
+//         } else {
+//           setCurrentUserIndex(0); // Assuming we start with the first user
+//         }
+//       })
+//       .catch(error => console.error('Error fetching users:', error));
+//   }, [location.state]);
+
+//   return (
+//     <Layout key={componentKey} style={{ minHeight: '100vh' }}>
+//       <Sider width={300} style={{ backgroundColor: '#007bff', color: '#fff' }}>
+//         <div style={{ padding: '1rem', textAlign: 'center' }}>
+//         <Dropdown trigger={['click']}>
+//             <Avatar
+//               size={100}
+//               icon={!avatarUrl && <UserOutlined />}
+//               src={form.avatarUrl}
+//               style={{ marginBottom: '1rem', cursor: 'pointer' }}
+//             />
+//           </Dropdown>
+//           <h3>{form.name}</h3>
+//         </div>
+//         <ul style={{ listStyleType: 'none', padding: 0 }}>
+//           {/* Sidebar items */}
+
+//         </ul>
+//       </Sider>
+//       <Layout>
+//         <Toolbar start={startContent} center={centerContent}/>
+//         <Content style={{ padding: '1rem' }}>
+//           <Fab style={{ marginTop: '20px', backgroundColor: '#007bff' }} color="primary" aria-label="add">
+//             <LooksOneIcon />
+//           </Fab>
+//           <Card title="Personal Information" style={{ marginBottom: '2rem' }}>
+//             <Form layout="vertical">
+//               <Row gutter={16}>
+//                 <Col span={12}>
+//                   <Form.Item label="Skills">
+//                     <Input value={form.skills} onChange={e => setForm({ ...form, skills: e.target.value })} rows={4} />
+//                   </Form.Item>
+//                 </Col>
+//                 <Col span={12}>
+//                   <Form.Item label="Education">
+//                     <Input value={form.education} onChange={e => setForm({ ...form, education: e.target.value })} rows={4} />
+//                   </Form.Item>
+//                 </Col>
+//               </Row>
+//               <Row gutter={16}>
+//                 <Col span={12}>
+//                   <Form.Item label="Rate">
+//                     <Input value={form.rate} onChange={e => setForm({ ...form, rate: e.target.value })} rows={4} />
+//                   </Form.Item>
+//                 </Col>
+//                 <Col span={12}>
+//                   <Form.Item label="Type">
+//                     <Select value={form.type} onChange={value => setForm({ ...form, type: value })}>
+//                       <Option value="Employee">Employee</Option>
+//                       <Option value="Contractor">Contractor</Option>
+//                     </Select>
+//                   </Form.Item>
+//                 </Col>
+//               </Row>
+//             </Form>
+//           </Card>
+//           <Fab style={{ backgroundColor: '#007bff' }} color="primary" aria-label="add">
+//             <LooksTwoIcon />
+//           </Fab>
+//           <Card title="Professional Details" style={{ marginBottom: '2rem' }}>
+//             <Form layout="vertical">
+//               <Form.Item label="Work Experience">
+//                 <Input.TextArea value={form.workExperience} onChange={e => setForm({ ...form, workExperience: e.target.value })} rows={4} />
+//               </Form.Item>
+//               <Form.Item label="Project Access">
+//                 <Input value={form.projectAccess} onChange={e => setForm({ ...form, projectAccess: e.target.value })} rows={4} />
+//               </Form.Item>
+//             </Form>
+//           </Card>
+//           <Fab style={{ backgroundColor: '#007bff' }} color="primary" aria-label="add">
+//             <Looks3Icon/>
+//           </Fab>
+//           <Card title="Goals" style={{ marginBottom: '2rem' }}>
+//             <Form layout="vertical">
+//               <Form.Item label={'Personal Goals'}>
+//                 <Input.TextArea value={form.goals} onChange={e => setForm({ ...form, goals: e.target.value })} rows={4} />
+//               </Form.Item>
+//             </Form>
+//           </Card>
+//         </Content>
+//       </Layout>
+//     </Layout>
+//   );
+// };
+
+// export default EmployeeForm;
+
+
+
+
+
+
+
+
 import React, { useState, useEffect } from 'react';
 import 'antd/dist/reset.css'; // Import Ant Design CSS
 import { Input, Select, Card, Avatar, Layout, Form, Row, Col, Tooltip, Button as AntButton, Dropdown, Menu, Upload, message } from 'antd';
@@ -4816,8 +5179,8 @@ import { InputText } from 'primereact/inputtext';
 import { Toolbar } from 'primereact/toolbar';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { jsPDF } from "jspdf";
-import { Document, Packer, Paragraph, TextRun, AlignmentType } from "docx";
-import { saveAs } from "file-saver";
+import { Document, Packer, Paragraph, TextRun, ImageRun, AlignmentType } from 'docx';
+import { saveAs } from 'file-saver';
 const { Header, Sider, Content } = Layout;
 const { Option } = Select;
 
@@ -4861,7 +5224,7 @@ const EmployeeForm = ({ icon_username } ) => {
 
 
 
-  const generatePDF = () => {
+  const generatePDF = async () => {
     const doc = new jsPDF();
   
     // Get the page width to center the title
@@ -4876,6 +5239,12 @@ const EmployeeForm = ({ icon_username } ) => {
     doc.setFontSize(20);
     doc.setFont('helvetica', 'bold');
     doc.text(title, x, 10);
+
+    // Add avatar image
+    if (form.avatarUrl) {
+      const base64Image = await convertImageToBase64(form.avatarUrl);
+      doc.addImage(base64Image, 'JPEG', 10, 20, 30, 30);
+    }
   
     // Define a helper function to add a section with a header
     const addSection = (header, content, y) => {
@@ -4888,7 +5257,7 @@ const EmployeeForm = ({ icon_username } ) => {
       doc.text(content || '', 10, y + 10); // Add content text
     };
   
-    let y = 30;
+    let y = 60;
     addSection('Skills', form.skills, y);
     y += 20; // Adjust y position for the next section
   
@@ -4917,53 +5286,78 @@ const EmployeeForm = ({ icon_username } ) => {
 
 
 
-  const generateDOCX = () => {
+  const generateDOCX = async () => {
+    const children = [
+      new Paragraph({
+        alignment: AlignmentType.CENTER,
+        children: [
+          new TextRun({
+            text: `Employee Information ${form.name}`,
+            bold: true,
+            size: 32,
+          }),
+        ],
+      }),
+    ];
+  
+    if (form.avatarUrl) {
+      const base64Image = await convertImageToBase64(form.avatarUrl);
+      const imageBuffer = base64Image.split(',')[1];
+      const imageData = `data:image/jpeg;base64,${imageBuffer}`;
+  
+      children.push(new Paragraph({
+        children: [
+          new ImageRun({
+            data: imageData,
+            transformation: {
+              width: 100,
+              height: 100,
+            },
+          }),
+        ],
+      }));
+    }
+  
+    const sections = [
+      { header: 'Skills', content: form.skills },
+      { header: 'Education', content: form.education },
+      { header: 'Rate', content: form.rate },
+      { header: 'Type', content: form.type },
+      { header: 'Work Experience', content: form.workExperience },
+      { header: 'Project Access', content: form.projectAccess },
+      { header: 'Goals', content: form.goals },
+    ];
+  
+    sections.forEach((section) => {
+      children.push(
+        new Paragraph({
+          spacing: {
+            before: 200,
+          },
+          children: [
+            new TextRun({
+              text: section.header,
+              bold: true,
+              size: 24,
+            }),
+          ],
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              text: section.content,
+              size: 24,
+            }),
+          ],
+        })
+      );
+    });
+  
     const doc = new Document({
       sections: [
         {
           properties: {},
-          children: [
-            new Paragraph({
-              alignment: AlignmentType.CENTER,
-              children: [
-                new TextRun({
-                  text: `Employee Information ${form.name}`,
-                  bold: true,
-                  size: 32,
-                }),
-              ],
-            }),
-            ...[
-              { header: 'Skills', content: form.skills },
-              { header: 'Education', content: form.education },
-              { header: 'Rate', content: form.rate },
-              { header: 'Type', content: form.type },
-              { header: 'Work Experience', content: form.workExperience },
-              { header: 'Project Access', content: form.projectAccess },
-              { header: 'Goals', content: form.goals },
-            ].map((section) => [
-              new Paragraph({
-                spacing: {
-                  before: 200,
-                },
-                children: [
-                  new TextRun({
-                    text: section.header,
-                    bold: true,
-                    size: 24,
-                  }),
-                ],
-              }),
-              new Paragraph({
-                children: [
-                  new TextRun({
-                    text: section.content,
-                    size: 24,
-                  }),
-                ],
-              }),
-            ]).flat(),
-          ],
+          children: children,
         },
       ],
     });
@@ -5241,6 +5635,26 @@ const EmployeeForm = ({ icon_username } ) => {
     });
   };
 
+
+  const convertImageToBase64 = async (url) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'Anonymous';
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        resolve(canvas.toDataURL('image/jpeg'));
+      };
+      img.onerror = reject;
+      img.src = url;
+    });
+  };
+
+
+
   return (
     <Layout key={componentKey} style={{ minHeight: '100vh' }}>
       <Sider width={300} style={{ backgroundColor: '#007bff', color: '#fff' }}>
@@ -5252,6 +5666,7 @@ const EmployeeForm = ({ icon_username } ) => {
               src={form.avatarUrl}
               style={{ marginBottom: '1rem', cursor: 'pointer' }}
             />
+             
           </Dropdown>
           <h3>{form.name}</h3>
         </div>
@@ -5379,11 +5794,3 @@ const EmployeeForm = ({ icon_username } ) => {
 };
 
 export default EmployeeForm;
-
-
-
-
-
-
-
-
