@@ -5520,9 +5520,9 @@ const EmployeeForm = ({ icon_username } ) => {
 
   const startContent = (
     <React.Fragment>
-      <PrimeButton icon="pi pi-plus" style={{ backgroundColor: '#007bff', borderRadius: '5px 0px 0px 5px', color: 'white', }} className="mr-2" />
+      {/* <PrimeButton icon="pi pi-plus" style={{ backgroundColor: '#007bff', borderRadius: '5px 0px 0px 5px', color: 'white', }} className="mr-2" /> */}
       <Dropdown overlay={menus} trigger={['click']}>
-        <PrimeButton icon="pi pi-upload" style={{ backgroundColor: '#007bff', borderRadius: '0 5px 5px 0', color: 'white', }} />
+        <PrimeButton icon="pi pi-upload" style={{ backgroundColor: '#007bff', borderRadius: '5px 5px 5px 5px', color: 'white', }} />
       </Dropdown>
     </React.Fragment>
   );

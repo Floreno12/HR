@@ -1207,15 +1207,15 @@ const Users = ({ icon_username }) => {
 
   const startContent = (
     <React.Fragment>
-      <PrimeButton
+      {/* <PrimeButton
         icon="pi pi-plus"
         style={{ backgroundColor: '#007bff', borderRadius: '5px 0px 0px 5px', color: 'white' }}
         className="mr-2"
-      />
-      <PrimeButton
+      /> */}
+      {/* <PrimeButton
         icon="pi pi-upload"
-        style={{ backgroundColor: '#007bff', borderRadius: '0 5px 5px 0', color: 'white' }}
-      />
+        style={{ backgroundColor: '#007bff', borderRadius: '5px 5px 5px 5px', color: 'white' }}
+      /> */}
     </React.Fragment>
   );
 
